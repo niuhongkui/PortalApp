@@ -14,6 +14,7 @@ const store = new Vuex.Store({
     },
     mutations: {
         login(state, userName) {
+			debugger
             state.userName = userName || '新用户';
             state.hasLogin = true;
         },
