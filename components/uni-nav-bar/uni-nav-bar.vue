@@ -3,7 +3,7 @@
 		<view class="uni-navbar__content" :class="{'uni-navbar--fixed': !!fixed,'uni-navbar--shadow':!!border,'uni-navbar--border':!!border}" :style="{'background-color':backgroundColor}">
 			<uni-status-bar v-if="statusBar"></uni-status-bar>
 			<view class="uni-navbar__header" :style="{color:color}">
-				<view class="uni-navbar__header-btns" @tap="onClickLeft">
+				<view v-if="leftText!='禁用'" class="uni-navbar__header-btns" @tap="onClickLeft">
 					<view v-if="leftIcon.length">
 						<uni-icon :type="leftIcon" :color="color" size="24"></uni-icon>
 					</view>

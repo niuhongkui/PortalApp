@@ -45,6 +45,13 @@
         ,{
             "path" : "pages/product/type",
             "style" : {}
+        },{
+            "path" : "pages/product/search",
+            "style" : {
+				"app-plus": {
+					"titleNView": false //禁用原生导航栏
+				}
+			}
         }
     ],
 	"tabBar": {
