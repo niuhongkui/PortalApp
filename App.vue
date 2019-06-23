@@ -2,6 +2,37 @@
 	export default {
 		onLaunch: function() {
 			console.log('App Launch');
+			try {
+				const value = uni.getStorageSync('launchFlag');
+				if (value) {
+					if (value == true) {
+						uni.switchTab({
+							url: 'pages/main/main'
+						});
+					} else {
+						uni.redirectTo({
+							url: '/pages/guide/guide'
+						});
+					}
+				} else {
+					uni.setStorage({
+						key: 'launchFlag',
+						data: true
+					});
+					uni.redirectTo({
+						url: '/pages/guide/guide'
+					});
+				}
+			} catch (e) {
+				// error 
+				uni.setStorage({
+					key: 'launchFlag',
+					data: true
+				});
+				uni.redirectTo({
+					url: '/pages/guide/guide'
+				});
+			}
 		},
 		onShow: function() {
 			console.log('App Show');
