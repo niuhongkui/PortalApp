@@ -6,7 +6,11 @@
 				<input confirm-type="search" @confirm="search"  class="input" type="text" placeholder="输入搜索关键词" />
 			</view>
 		</uni-nav-bar>
+		<swiper indicator-dots="true">
+			<swiper-item v-for="(img, key) in imgUrls" :key="key"><image :src="img" /></swiper-item>
+		</swiper>
 	</view>
+	
 </template>
 
 <script>
@@ -18,13 +22,16 @@
 			uniNavBar,
 			uniIcon
 		},
-		data() {},
+		data() {
+			return {
+				showSwiper: false,
+				imgUrls: [
+					'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/muwu.jpg',
+					'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg'
+				]
+			}
+		},
 		methods: {
-			back() {
-				uni.navigateBack({
-					delta: 1
-				})
-			},
 			search() {
 				uni.showToast({
 					title: '搜索'

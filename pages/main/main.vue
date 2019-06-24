@@ -1,137 +1,193 @@
 <template>
-    <view>    	
-    	<uni-nav-bar color="#333333" background-color="#FFFFFF" :fixed="false" right-icon="scan" @click-left="showCity" @click-right="scan">
-    		<block slot="left">
-    			<view class="city">
-    				<view>{{city}}</view>
-    				<uni-icon type="arrowdown" color="#333333" size="22"></uni-icon>
-    			</view>
-    		</block>
-    		<view class="input-view">
-    			<uni-icon type="search" size="22" color="#666666"></uni-icon>
-    			<input confirm-type="search" disabled="true" @tap="reToSearch" class="input" type="text" placeholder="输入搜索关键词" />
-    		</view>
-    	</uni-nav-bar>
-    </view>
+	<view>
+		<uni-nav-bar color="#333333" background-color="#FFFFFF" :fixed="true" right-icon="scan" @click-left="showCity"
+		 @click-right="scan">
+			<block slot="left">
+				<view class="city">
+					<view>{{city}}</view>
+					<uni-icon type="arrowdown" color="#333333" size="22"></uni-icon>
+				</view>
+			</block>
+			<view class="input-view">
+				<uni-icon type="search" size="22" color="#666666"></uni-icon>
+				<input confirm-type="search" disabled="true" @tap="reToSearch" class="input" type="text" placeholder="输入搜索关键词" />
+			</view>
+		</uni-nav-bar>
+		<view class="content">
+			<uni-swiper-dot :info="info" :current="current" field="content" :mode="mode">
+				<swiper :autoplay="true" class="swiper-box" @change="change">
+					<swiper-item v-for="(item ,index) in info" :key="index">
+						<view class="swiper-item">
+							<image :src="item.url" mode="scaleToFill"></image>
+						</view>
+					</swiper-item>
+				</swiper>
+			</uni-swiper-dot>
+		</view>
+		<uni-grid :options="category" @click="cateToPage" :show-out-border="false" :column-num="4"></uni-grid>
+	</view>
 </template>
 
 <script>
-    import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue'
-    import uniIcon from '@/components/uni-icon/uni-icon.vue'
-    
-    export default {
-    	components: {
-    		uniNavBar,
-    		uniIcon
-    	},
-    	data() {
-    		return {
-    			city: '北京'
-    		}
-    	},
-    	methods: {
-    		showCity() {
-    			uni.showToast({
-    				title: '选择城市'
-    			})
-    		},
-    		scan() {
-    			uni.showToast({
-    				title: '扫码'
-    			})
-    		},
-    		reToSearch() {
-    			uni.navigateTo({
-    				url:"/pages/product/search"
-    			})
-    		}
-    	},
-    	onPullDownRefresh() {
-    		console.log('onPullDownRefresh')
-    		setTimeout(function() {
-    			uni.stopPullDownRefresh()
-    			console.log('stopPullDownRefresh')
-    		}, 1000)
-    	}
-    }
+	let oldVal = 0;
+	import uniSwiperDot from '@/components/uni-swiper-dot/uni-swiper-dot.vue'
+	import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue'
+	import uniIcon from '@/components/uni-icon/uni-icon.vue'
+	import uniGrid from '@/components/uni-grid/uni-grid.vue'
+
+	export default {
+		components: {
+			uniNavBar,
+			uniIcon,
+			uniSwiperDot,
+			uniGrid
+		},
+		data() {
+			return {
+				city: '北京',
+				info: [{
+					colorClass: 'uni-bg-red',
+					url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/shuijiao.jpg',
+					content: '内容 A'
+				}, {
+					colorClass: 'uni-bg-green',
+					url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/muwu.jpg',
+					content: '内容 B'
+				}, {
+					colorClass: 'uni-bg-blue',
+					url: 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/images/cbd.jpg',
+					content: '内容 C'
+				}],
+				modeIndex: -1,
+				styleIndex: -1,
+				current: 0,
+				mode: 'default',
+				category: [{
+						image: '/static/c1.png',
+						text: 'Grid'
+					},
+					{
+						image: '/static/c2.png',
+						text: 'Grid'
+					},
+					{
+						image: '/static/c3.png',
+						text: 'Grid'
+					},
+					{
+						image: '/static/c4.png',
+						text: '分类'
+					}
+				],
+			}
+		},
+		methods: {
+			showCity() {
+				uni.showToast({
+					title: '选择城市'
+				})
+			},
+			change(e) {
+				this.current = e.detail.current;
+			},
+			scan() {
+				uni.showToast({
+					title: '扫码'
+				})
+			},
+			reToSearch() {
+				uni.navigateTo({
+					url: "/pages/product/search"
+				})
+			},
+			cateToPage(e) {
+				if (e.index == 3) {
+					uni.switchTab({
+						url: "/pages/product/type"
+					})
+				}
+
+			}
+		},
+		onPullDownRefresh() {
+			console.log('onPullDownRefresh')
+			setTimeout(function() {
+				uni.stopPullDownRefresh()
+				console.log('stopPullDownRefresh')
+			}, 1000)
+		}
+	}
 </script>
 
 <style>
-    page {
-    	display: flex;
-    	flex-direction: column;
-    	box-sizing: border-box;
-    	background-color: #fff
-    }
-    
-    view {
-    	font-size: 28upx;
-    	line-height: inherit
-    }
-    
-    .example {
-    	padding: 0 30upx 30upx
-    }
-    
-    .example-title {
-    	font-size: 32upx;
-    	line-height: 32upx;
-    	color: #777;
-    	margin: 40upx 25upx;
-    	position: relative
-    }
-    
-    .example .example-title {
-    	margin: 40upx 0
-    }
-    
-    .example-body {
-    	padding: 0 40upx
-    }
-    
-    .uni-common-mt {
-    	color: #7a7e83;
-    	font-size: 28upx;
-    	padding: 30upx;
-    }
-    
-    .title {
-    	font-size: 15px;
-    	line-height: 20px;
-    	color: #333333;
-    	padding: 15px;
-    }
-    
-    .city {
-    	display: flex;
-    	flex-direction: row;
-    	align-items: center;
-    	justify-content: center;
-    	width: 100%;
-    	margin-left: 8px;
-    	white-space: nowrap;
-    }
-    
-    .input-view {
-    	width: 92%;
-    	display: flex;
-    	background-color: #e7e7e7;
-    	height: 30px;
-    	border-radius: 15px;
-    	padding: 0 4%;
-    	flex-wrap: nowrap;
-    	margin: 7px 0;
-    	line-height: 30px;
-    }
-    
-    .input-view .uni-icon {
-    	line-height: 30px !important;
-    }
-    
-    .input-view .input {
-    	height: 30px;
-    	line-height: 30px;
-    	width: 94%;
-    	padding: 0 3%;
-    }
+	page {
+		display: flex;
+		flex-direction: column;
+		box-sizing: border-box;
+		background-color: #fff
+	}
+
+	.uni-common-mt {
+		color: #7a7e83;
+		font-size: 28upx;
+		padding: 30upx;
+	}
+
+	.title {
+		font-size: 15px;
+		line-height: 20px;
+		color: #333333;
+		padding: 15px;
+	}
+
+	.city {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		margin-left: 8px;
+		white-space: nowrap;
+	}
+
+	.input-view {
+		width: 92%;
+		display: flex;
+		background-color: #e7e7e7;
+		height: 30px;
+		border-radius: 15px;
+		padding: 0 4%;
+		flex-wrap: nowrap;
+		margin: 7px 0;
+		line-height: 30px;
+	}
+
+	.input-view .uni-icon {
+		line-height: 30px !important;
+	}
+
+	.input-view .input {
+		height: 30px;
+		line-height: 30px;
+		width: 94%;
+		padding: 0 3%;
+	}
+
+	.swiper-box {
+		height: 400upx;
+	}
+
+	.swiper-item {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100%;
+		background: #eee;
+		color: #fff;
+	}
+
+	.swiper-item image {
+		width: 100%;
+		height: 100%;
+	}
 </style>

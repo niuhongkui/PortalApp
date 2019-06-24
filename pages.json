@@ -44,7 +44,11 @@
         }
         ,{
             "path" : "pages/product/type",
-            "style" : {}
+            "style" : {
+				"app-plus": {
+					"titleNView": false //禁用原生导航栏
+				}
+			}
         },{
             "path" : "pages/product/search",
             "style" : {
@@ -52,6 +56,10 @@
 					"titleNView": false //禁用原生导航栏
 				}
 			}
+        }
+        ,{
+            "path" : "pages/cart/cart",
+            "style" : {}
         }
     ],
 	"tabBar": {
@@ -69,10 +77,10 @@
 			"iconPath": "static/img/search.png",
 			"selectedIconPath": "static/img/searchHL.png"
 		},{
-			"pagePath": "pages/order/orderlist",
-			"text": "订单",
-			"iconPath": "static/img/order.png",
-			"selectedIconPath": "static/img/orderHL.png"
+			"pagePath": "pages/cart/cart",
+			"text": "购物车",
+			"iconPath": "static/img/cart.png",
+			"selectedIconPath": "static/img/cartHL.png"
 		}, {
 			"pagePath": "pages/user/user",
 			"text": "我的",
