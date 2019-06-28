@@ -127,7 +127,7 @@
 		display: inline-flex;
 		flex-wrap: nowrap;
 		flex-shrink: 0;
-		width: 120upx;
+		width: 40upx;
 		padding: 0 12upx
 	}
 
