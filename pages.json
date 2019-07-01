@@ -1,13 +1,32 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页,
-		 {
+		{
 			"path": "pages/main/main",
 			"style": {
+				"navigationBarTitleText": "导航栏带搜索框",
 				"app-plus": {
-					"titleNView": false //禁用原生导航栏
+					"titleNView": {
+						"type": "transparent",
+						"titleColor": "#fff",
+						"backgroundColor": "#007AFF",
+						"buttons": [{
+							"fontSrc": "/static/uni.ttf",
+							"text": "\ue466",
+							"width": "40px",
+							"fontSize": "28px",
+							"color": "#fff",
+							"background": "rgba(0,0,0,0)"
+						}],
+						"searchInput": {
+							"backgroundColor": "#fff",
+							"borderRadius": "6px",
+							"placeholder": "请输入菜品 如：西红柿",
+							"disabled": true
+						}
+					}
 				}
 			}
-		},{
+		}, {
 			"path": "pages/guide/guide",
 			"style": {
 				"app-plus": {
@@ -34,34 +53,48 @@
 			"style": {
 				"navigationBarTitleText": "我的"
 			}
+		}, {
+			"path": "pages/order/orderlist",
+			"style": {}
+		}, {
+			"path": "pages/order/orderdetail",
+			"style": {}
+		}, {
+			"path": "pages/product/type",
+			"style": {
+				"app-plus": {
+					"titleNView": false //禁用原生导航栏
+				}
+			}
+		}, {
+			"path": "pages/product/search",
+			"style": {
+				"navigationBarTitleText": "搜索",
+				"app-plus": {
+					"titleNView": {
+						"titleColor": "#fff",
+						"backgroundColor": "rgb(15, 174, 255)",
+						"buttons": [{
+							"fontSrc": "/static/uni.ttf",
+							"text": "\ue466",
+							"width": "auto",
+							"fontSize": "28px",
+							"color": "#fff"
+						}],
+						"searchInput": {
+							"backgroundColor": "#fff",
+							"borderRadius": "6px",
+							"placeholder": "请输入菜品 如：西红柿",
+							"autoFocus": true
+						}
+					}
+				}
+			}
+		}, {
+			"path": "pages/cart/cart",
+			"style": {}
 		}
-	    ,{
-            "path" : "pages/order/orderlist",
-            "style" : {}
-        },{
-            "path" : "pages/order/orderdetail",
-            "style" : {}
-        }
-        ,{
-            "path" : "pages/product/type",
-            "style" : {
-				"app-plus": {
-					"titleNView": false //禁用原生导航栏
-				}
-			}
-        },{
-            "path" : "pages/product/search",
-            "style" : {
-				"app-plus": {
-					"titleNView": false //禁用原生导航栏
-				}
-			}
-        }
-        ,{
-            "path" : "pages/cart/cart",
-            "style" : {}
-        }
-    ],
+	],
 	"tabBar": {
 		"color": "#7a7e83",
 		"selectedColor": "#0faeff",
@@ -76,7 +109,7 @@
 			"text": "发现",
 			"iconPath": "static/img/search.png",
 			"selectedIconPath": "static/img/searchHL.png"
-		},{
+		}, {
 			"pagePath": "pages/cart/cart",
 			"text": "购物车",
 			"iconPath": "static/img/cart.png",

@@ -1,18 +1,5 @@
 <template>
-	<view>
-		<uni-nav-bar color="#333333" background-color="#FFFFFF" :fixed="true" right-icon="scan" @click-left="showCity"
-		 @click-right="scan">
-			<block slot="left">
-				<view class="city">
-					<view>{{city}}</view>
-					<uni-icon type="arrowdown" color="#333333" size="22"></uni-icon>
-				</view>
-			</block>
-			<view class="input-view">
-				<uni-icon type="search" size="22" color="#666666"></uni-icon>
-				<input confirm-type="search" disabled="true" @tap="reToSearch" class="input" type="text" placeholder="输入搜索关键词" />
-			</view>
-		</uni-nav-bar>
+	<view>		
 		<view class="content">
 			<uni-swiper-dot :info="info" :current="current" field="content" :mode="mode">
 				<swiper :autoplay="true" class="swiper-box" @change="change">
@@ -31,13 +18,11 @@
 <script>
 	let oldVal = 0;
 	import uniSwiperDot from '@/components/uni-swiper-dot/uni-swiper-dot.vue'
-	import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue'
 	import uniIcon from '@/components/uni-icon/uni-icon.vue'
 	import uniGrid from '@/components/uni-grid/uni-grid.vue'
 
 	export default {
 		components: {
-			uniNavBar,
 			uniIcon,
 			uniSwiperDot,
 			uniGrid
@@ -90,16 +75,6 @@
 			change(e) {
 				this.current = e.detail.current;
 			},
-			scan() {
-				uni.showToast({
-					title: '扫码'
-				})
-			},
-			reToSearch() {
-				uni.navigateTo({
-					url: "/pages/product/search"
-				})
-			},
 			cateToPage(e) {
 				if (e.index == 3) {
 					uni.switchTab({
@@ -115,7 +90,24 @@
 				uni.stopPullDownRefresh()
 				console.log('stopPullDownRefresh')
 			}, 1000)
-		}
+		},
+			onNavigationBarSearchInputClicked(e) {
+				console.log('事件执行了')
+				uni.navigateTo({
+					url: "/pages/product/search"
+				});
+			},
+			onNavigationBarButtonTap() {
+				uni.showModal({
+					title: '提示',
+					content: '用户点击了功能按钮，这里仅做展示。',
+					success: res => {
+						if (res.confirm) {
+							console.log('用户点击了确定');
+						}
+					}
+				});
+			}
 	}
 </script>
 

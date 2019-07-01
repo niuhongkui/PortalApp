@@ -1,13 +1,33 @@
 <template>
 	<view class="page">
-		<view style="width: 750upx;">
-			<uni-nav-bar color="#333333" left-icon="back"   @click-left="goback" :status-bar="true" :fixed="true" background-color="#FFFFFF" right-text="搜索" @click-right="search">
-				<view class="input-view">
-					<uni-icon type="search" size="22" color="#666666"></uni-icon>
-					<input confirm-type="search" @confirm="search"  class="input" type="text" placeholder="输入搜索关键词" />
+		<view class="wrapper">
+			<view v-if="isHistory" class="history-box">
+				<view v-if="historyList.length > 0">
+					<view class="history-title">
+						<text>搜索历史</text>
+						<text class="uni-icon uni-icon-trash" @click="clearSearch"></text>
+					</view>
+					<view class="history-content">
+						<view class="history-item" v-for="(item, index) in historyList" :key="index">
+							{{ item.name }}
+						</view>
+					</view>
 				</view>
-			</uni-nav-bar>
-			
+				<view v-else class="no-data">您还没有历史记录</view>
+			</view>
+			<view v-else class="history-box">
+				<view v-if="historyList.length > 0" class="history-list-box">
+					<view
+						class="history-list-item"
+						v-for="(item, index) in historyList"
+						:key="index"
+						@click="listTap(item)"
+					>
+						<rich-text :nodes="item.nameNodes"></rich-text>
+					</view>
+				</view>
+				<view v-else class="no-data">没有搜索到相关内容</view>
+			</view>
 		</view>
 		<view class="uni-product-list">
 			<view class="uni-product" v-for="(product,index) in productList" :key="index">
@@ -28,12 +48,11 @@
 </template>
 
 <script>
-	import uniNavBar from '@/components/uni-nav-bar/uni-nav-bar.vue'
+	
 	import uniIcon from '@/components/uni-icon/uni-icon.vue'
 
 	export default {
 		components: {
-			uniNavBar,
 			uniIcon
 		},
 		data() {
