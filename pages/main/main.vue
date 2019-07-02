@@ -1,5 +1,5 @@
 <template>
-	<view>		
+	<view>
 		<view class="content">
 			<uni-swiper-dot :info="info" :current="current" field="content" :mode="mode">
 				<swiper :autoplay="true" class="swiper-box" @change="change">
@@ -91,23 +91,16 @@
 				console.log('stopPullDownRefresh')
 			}, 1000)
 		},
-			onNavigationBarSearchInputClicked(e) {
-				console.log('事件执行了')
-				uni.navigateTo({
-					url: "/pages/product/search"
-				});
-			},
-			onNavigationBarButtonTap() {
-				uni.showModal({
-					title: '提示',
-					content: '用户点击了功能按钮，这里仅做展示。',
-					success: res => {
-						if (res.confirm) {
-							console.log('用户点击了确定');
-						}
-					}
-				});
-			}
+		onNavigationBarSearchInputClicked(e) {
+			uni.navigateTo({
+				url: "/pages/product/search"
+			});
+		},
+		onNavigationBarButtonTap() {
+			uni.navigateTo({
+				url: "/pages/product/search"
+			});
+		}
 	}
 </script>
 
