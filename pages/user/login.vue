@@ -14,9 +14,9 @@
             <button type="primary" class="primary" @tap="bindLogin">登录</button>
         </view>
         <view class="action-row">
-            <navigator url="../reg/reg">注册账号</navigator>
+            <navigator url="/pages/user/reg">注册账号</navigator>
             <text>|</text>
-            <navigator url="../pwd/pwd">忘记密码</navigator>
+            <navigator url="/pages/user/pwd">忘记密码</navigator>
         </view>
         <view class="oauth-row" v-if="hasProvider" v-bind:style="{top: positionTop + 'px'}">
             <view class="oauth-image" v-for="provider in providerList" :key="provider.value">
@@ -32,7 +32,7 @@
         mapState,
         mapMutations
     } from 'vuex'
-    import mInput from '../../components/m-input.vue'
+    import mInput from '@/components/m-input.vue'
 
     export default {
         components: {
@@ -163,6 +163,128 @@
 </script>
 
 <style>
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*每个页面公共css */
+/* uni-app默认全局使用flex布局。因为flex布局有利于跨更多平台，尤其是采用原生渲染的平台。如不了解flex布局，请参考http://www.w3.org/TR/css3-flexbox/。如不使用flex布局，请删除或注释掉本行。*/
+body,
+uni-page-body {
+	min-height: 100%;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+}
+
+/* 原生组件模式下需要注意组件外部样式 */
+m-input {
+	width: 100%;
+	min-height: 100%;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+}
+.content {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-flex: 1;
+	-webkit-flex: 1;
+	    -ms-flex: 1;
+	        flex: 1;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: column;
+	    -ms-flex-direction: column;
+	        flex-direction: column;
+	background-color: #efeff4;
+	padding: 10px;
+}
+.input-group {
+	background-color: #ffffff;
+	margin-top: 21px;
+	position: relative;
+}
+.input-group::before {
+	position: absolute;
+	right: 0;
+	top: 0;
+	left: 0;
+	height: 1px;
+	content: '';
+	-webkit-transform: scaleY(.5);
+	-ms-transform: scaleY(.5);
+	    transform: scaleY(.5);
+	background-color: #c8c7cc;
+}
+.input-group::after {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	height: 1px;
+	content: '';
+	-webkit-transform: scaleY(.5);
+	-ms-transform: scaleY(.5);
+	    transform: scaleY(.5);
+	background-color: #c8c7cc;
+}
+.input-row {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-box-direction: normal;
+	-webkit-flex-direction: row;
+	    -ms-flex-direction: row;
+	        flex-direction: row;
+	position: relative;
+}
+.input-row .title {
+	width: 20%;
+	height: 26px;
+	min-height: 26px;
+	padding: 8px 0;
+	padding-left: 16px;
+	line-height: 26px;
+}
+.input-row.border::after {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 8px;
+	height: 1px;
+	content: '';
+	-webkit-transform: scaleY(.5);
+	-ms-transform: scaleY(.5);
+	    transform: scaleY(.5);
+	background-color: #c8c7cc;
+}
+.btn-row {
+	margin-top: 26px;
+	padding: 10px;
+}
+uni-button.primary {
+	background-color: #0faeff;
+}
+
     .action-row {
         display: flex;
         flex-direction: row;
