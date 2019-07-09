@@ -40,7 +40,8 @@
 				hasProvider: false,
 				UserCode: '',
 				PassWord: '',
-				positionTop: 0
+				positionTop: 0,
+				forcedLogin:true
 			}
 		},
 		methods: {
@@ -76,12 +77,10 @@
 				 * 实际开发中，使用 uni.request 将账号信息发送至服务端，客户端在回调函数中获取结果信息。
 				 */
 				const data = {
-					account: this.account,
-					password: this.password
+					UserCode: this.UserCode,
+					PassWord: this.PassWord
 				};
-				const validUser = service.getUsers().some(function(user) {
-					return data.account === user.account && data.password === user.password;
-				});
+				const validUser = service.getUsers(data);
 				if (validUser) {
 					this.toMain(this.account);
 				} else {
@@ -112,7 +111,6 @@
 				});
 			},
 			toMain(userName) {
-				this.login(userName);
 				/**
 				 * 强制登录时使用reLaunch方式跳转过来
 				 * 返回首页也使用reLaunch方式

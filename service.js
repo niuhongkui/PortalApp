@@ -2,19 +2,19 @@
 const USERS_KEY = 'USERS_KEY';
 const STATE_KEY = 'STATE_KEY';
 
-var url = "http://127.0.0.1/api/userinfo/loginon/1"
+const url = "http://localhost:81"
 
-const getUsers = function(userinfo) {
+const getUsers = function(userinfo) {	
 	uni.request({
-		url: url, //仅为示例，并非真实接口地址。
+		url: url+"/api/userinfo/loginon/1", //仅为示例，并非真实接口地址。
 		data: userinfo,
 		header:{
-			'content-type':'application/json'
+			'content-type':'application/x-www-form-urlencoded'
 		},
 		dataType: 'json',
 		method :'POST',
 		success: (res) => {
-			debugger
+			
 		}
 	});
 	let ret = '';
@@ -36,5 +36,7 @@ const addUser = function(userInfo) {
 
 export default {
 	getUsers,
-	addUser
+	addUser,
+	url
+	
 }
