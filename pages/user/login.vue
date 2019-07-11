@@ -26,8 +26,8 @@
 	</view>
 </template>
 
-<script>
-	import service from '../../service.js';
+<script>	
+	var service = require('../../common/service.js');	
 	import mInput from '@/components/m-input.vue'
 
 	export default {
@@ -57,6 +57,7 @@
 				 * 客户端对账号信息进行一些必要的校验。
 				 * 实际开发中，根据业务需要进行处理，这里仅做示例。
 				 */
+				var ths=this;
 				if (this.UserCode.length < 5) {
 					uni.showToast({
 						icon: 'none',
@@ -76,19 +77,37 @@
 				 * 检测用户账号密码是否在已注册的用户列表中
 				 * 实际开发中，使用 uni.request 将账号信息发送至服务端，客户端在回调函数中获取结果信息。
 				 */
-				const data = {
+				var data = {
 					UserCode: this.UserCode,
 					PassWord: this.PassWord
 				};
-				const validUser = service.getUsers(data);
-				if (validUser) {
-					this.toMain(this.account);
-				} else {
-					uni.showToast({
-						icon: 'none',
-						title: '用户账号或密码不正确',
-					});
-				}
+				service.ajax({
+					url:"/api/userinfo/loginon/in",
+					data:data,
+					method:"POST",
+					success:function(json){
+						var res=json.data;
+						if(res.Success){
+							service.login(res.Data)
+							ths.toMain();
+						}else{							
+							uni.showToast({								
+								title:res.Msg,
+								icon:"none"
+							});
+						}
+					}
+				})
+				
+				// const validUser = service.ajax(data);
+				// if (validUser) {
+				// 	this.toMain(this.account);
+				// } else {
+				// 	uni.showToast({
+				// 		icon: 'none',
+				// 		title: '用户账号或密码不正确',
+				// 	});
+				// }
 			},
 			oauth(value) {
 				uni.login({
@@ -110,19 +129,10 @@
 					}
 				});
 			},
-			toMain(userName) {
-				/**
-				 * 强制登录时使用reLaunch方式跳转过来
-				 * 返回首页也使用reLaunch方式
-				 */
-				if (this.forcedLogin) {
-					uni.reLaunch({
-						url: '../main/main',
-					});
-				} else {
-					uni.navigateBack();
-				}
-
+			toMain() {
+				uni.reLaunch({
+					url: '../main/main',
+				});
 			}
 		},
 		onBackPress: function(options) {

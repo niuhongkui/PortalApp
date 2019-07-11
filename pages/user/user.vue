@@ -1,25 +1,22 @@
 <template>
 	<view class="content">
-		
+		<view class="btn-row">
+			<button type="primary" class="primary" @tap="bindLogout">退出</button>
+		</view>
 	</view>
 </template>
 
 <script>
-	import {
-		mapState,
-		mapMutations
-	} from 'vuex'
+	var service = require('../../common/service.js');	
 
 	export default {
 		computed: {
 
 		},
 		onShow() {
-			var userinfo = uni.getStorageSync('userinfo');
+			var userinfo = service.getState();
 			if (!userinfo) {
-				uni.navigateTo({
-					url: '/pages/user/login',
-				});
+				this.bindLogin();
 			}
 		},
 		methods: {
@@ -29,14 +26,10 @@
 				});
 			},
 			bindLogout() {
-				/**
-				 * 如果需要强制登录跳转回登录页面
-				 */
-				if (this.forcedLogin) {
-					uni.reLaunch({
-						url: '../login/login',
-					});
-				}
+				service.loginOut();
+				uni.reLaunch({
+					url: '../user/login',
+				});
 			}
 		}
 	}
