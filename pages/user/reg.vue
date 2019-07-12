@@ -2,15 +2,15 @@
 	<view class="content">
 		<view class="input-group">
 			<view class="input-row border">
-				<text class="title">手机号：</text>
-				<m-input type="text" :maxlength="11" focus="true" clearable v-model="UserCode" placeholder="请输入手机号"></m-input>
-				<button :disabled="disabled" @tap="getVerifyCode">验证码 {{btnTxt}}</button>
+				<text class="title">账号：</text>
+				<m-input type="text" :maxlength="11" focus="true" clearable v-model="UserCode" placeholder="请输入账号(手机号)"></m-input>
+				<button class="inputbtn" :disabled="disabled" @tap="getVerifyCode">验证码<span v-if="btnTxt>0">({{btnTxt}})</span></button>
 			</view>
 			<view class="input-row border">
 				<text class="title">验证码：</text>
 				<m-input type="text" :maxlength="6" clearable v-model="VerifyCode" placeholder="请输入验证码"></m-input>
 			</view>
-			<view class="input-row">
+			<view class="input-row border">
 				<text class="title">密码：</text>
 				<m-input type="password" displayable v-model="PassWord" placeholder="请输入密码"></m-input>
 			</view>
@@ -36,12 +36,49 @@
 				PassWord: '',
 				VerifyCode: '',
 				disabled: false,
-				btnTxt: ''
+				btnTxt: 0,
+				InterValObj: {}
 			}
 		},
 		methods: {
 			getVerifyCode() {
-
+				var ths = this;
+				if (!util.isPoneAvailable(ths.UserCode)) {
+					uni.showToast({
+						icon: 'none',
+						title: '手机号有误'
+					});
+					return;
+				}
+				ths.disabled = true;
+				ths.btnTxt = 120;
+				ths.InterValObj = window.setInterval(ths.SetRemainTime, 1000); //启动计时器，1秒执行一次
+				service.ajax({
+					url: "/api/userinfo/Re_VerifyCode/in?strPhone="+ths.UserCode,
+					success: function(json) {
+						var res = json.data;
+						if(res.Success){
+							uni.showToast({
+								icon: 'success',
+								title: res.Msg
+							});
+						}else{
+							uni.showToast({
+								icon: 'none',
+								title: res.Msg
+							});
+						}
+					}
+				})
+			},
+			SetRemainTime() {
+				var ths = this;
+				if (ths.btnTxt == 0) {
+					window.clearInterval(ths.InterValObj); //停止计时器
+					ths.disabled = false;
+				} else {
+					ths.btnTxt--;
+				}
 			},
 			register() {
 				var ths = this;
@@ -73,7 +110,7 @@
 					PassWord: this.PassWord
 				}
 				service.ajax({
-					url: "/api/userinfo/register/user",
+					url: "/api/userinfo/Registered/user",
 					data: data,
 					method: "POST",
 					success: function(json) {
@@ -126,6 +163,11 @@
 		display: -webkit-flex;
 		display: -ms-flexbox;
 		display: flex;
+	}
+
+	.inputbtn {
+		font-size: inherit;
+		padding: 8upx 15upx;
 	}
 
 	.content {

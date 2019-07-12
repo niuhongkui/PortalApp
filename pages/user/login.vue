@@ -3,7 +3,7 @@
 		<view class="input-group">
 			<view class="input-row border">
 				<text class="title">账号：</text>
-				<m-input class="m-input" :maxlength="11" type="text" clearable focus v-model="UserCode" placeholder="请输入账号"></m-input>
+				<m-input class="m-input" :maxlength="11" type="text" clearable focus v-model="UserCode" placeholder="请输入账号(手机号)"></m-input>
 			</view>
 			<view class="input-row">
 				<text class="title">密码：</text>

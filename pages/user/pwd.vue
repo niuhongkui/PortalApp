@@ -1,51 +1,122 @@
 <template>
-    <view class="content">
-        <view class="input-group">
-            <view class="input-row">
-                <text class="title">邮箱：</text>
-                <m-input type="text" focus clearable v-model="email" placeholder="请输入邮箱"></m-input>
-            </view>
-        </view>
+	<view class="content">
+		<view class="input-group">
+			<view class="input-row border">
+				<text class="title">账号：</text>
+				<m-input type="text" :maxlength="11" focus="true" clearable v-model="UserCode" placeholder="请输入账号(手机号)"></m-input>
+				<button class="inputbtn" :disabled="disabled" @tap="getVerifyCode">验证码<span v-if="btnTxt>0">({{btnTxt}})</span></button>
+			</view>
+			<view class="input-row border">
+				<text class="title">验证码：</text>
+				<m-input type="text" :maxlength="6" clearable v-model="VerifyCode" placeholder="请输入验证码"></m-input>
+			</view>
+			<view class="input-row border">
+				<text class="title">密码：</text>
+				<m-input type="password" displayable v-model="PassWord" placeholder="请输入密码"></m-input>
+			</view>
+		</view>
 
-        <view class="btn-row">
-            <button type="primary" class="primary" @tap="findPassword">提交</button>
-        </view>
-    </view>
+		<view class="btn-row">
+			<button type="primary" class="primary" @tap="editPassword">修改密码</button>
+		</view>
+	</view>
 </template>
 
 <script>
-    import service from '@/common/service.js';
-    import mInput from '../../components/m-input.vue';
+	var service = require('../../common/service.js');
+	var util = require('../../common/util.js');
+	import mInput from '../../components/m-input.vue';
 
-    export default {
-        components: {
-            mInput
-        },
-        data() {
-            return {
-                email: ''
-            }
-        },
-        methods: {
-            findPassword() {
-                /**
-                 * 仅做示例
-                 */
-                if (this.email.length < 3 || !~this.email.indexOf('@')) {
-                    uni.showToast({
-                        icon: 'none',
-                        title: '邮箱地址不合法',
-                    });
-                    return;
-                }
-                uni.showToast({
-                    icon: 'none',
-                    title: '已发送重置邮件至注册邮箱，请注意查收。',
-                    duration: 3000
-                });
-            }
-        }
-    }
+	export default {
+		components: {
+			mInput
+		},
+		data() {
+			return {
+				UserCode: '',
+				PassWord: '',
+				VerifyCode: '',
+				disabled: false,
+				btnTxt: 0,
+				InterValObj: {}
+			}
+		},
+		methods: {
+			getVerifyCode() {
+				var ths = this;
+				if (!util.isPoneAvailable(ths.UserCode)) {
+					uni.showToast({
+						icon: 'none',
+						title: '手机号有误'
+					});
+					return;
+				}
+				ths.disabled = true;
+				ths.btnTxt = 120;
+				ths.InterValObj = window.setInterval(ths.SetRemainTime, 1000); //启动计时器，1秒执行一次
+				service.ajax({
+					url: "/api/userinfo/VerifyCode/in?strPhone="+ths.UserCode,
+					success: function(json) {
+						var res = json.data;
+						if(res.Success){
+							uni.showToast({
+								icon: 'success',
+								title: res.Msg
+							});
+						}else{
+							uni.showToast({
+								icon: 'none',
+								title: res.Msg
+							});
+						}
+					}
+				})
+			},
+			SetRemainTime() {
+				var ths = this;
+				if (ths.btnTxt == 0) {
+					window.clearInterval(ths.InterValObj); //停止计时器
+					ths.disabled = false;
+				} else {
+					ths.btnTxt--;
+				}
+			},
+			editPassword() {
+				const data = {
+					UserCode: this.UserCode,
+					VerifyCode: this.VerifyCode,
+					PassWord: this.PassWord
+				}
+				service.ajax({
+					url: "/api/userinfo/EditPassWord/edit",
+					data: data,
+					method: "POST",
+					success: function(json) {
+						var res = json.data;
+						if (res.Success) {
+							service.ajax({
+								url: "/api/userinfo/loginon/in",
+								data: data,
+								method: "POST",
+								success: function(ijson) {
+									var ires = ijson.data;
+									service.login(ires.Data)
+									uni.switchTab({
+										url: "/pages/main/main"
+									})
+								}
+							})
+						} else {
+							uni.showToast({
+								title: res.Msg,
+								icon: "none"
+							});
+						}
+					}
+				})
+			}
+		}
+	}
 </script>
 
 
@@ -69,6 +140,10 @@
 		display: -webkit-flex;
 		display: -ms-flexbox;
 		display: flex;
+	}
+	.inputbtn {
+		font-size: inherit;
+		padding: 8upx 15upx;
 	}
 
 	.content {
