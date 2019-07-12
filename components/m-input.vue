@@ -1,6 +1,6 @@
 <template>
 	<view class="m-input-view">
-		<input :focus="focus_" :type="inputType" :value="value" @input="onInput" class="m-input-input" :placeholder="placeholder"
+		<input :focus="focus_" :type="inputType" :maxlength="max" :value="value" @input="onInput" class="m-input-input" :placeholder="placeholder"
 		 :password="type==='password'&&!showPassword" @focus="onFocus" @blur="onBlur" />
 		<!-- 优先显示密码可见按钮 -->
 		<view v-if="clearable_&&!displayable_&&value.length" class="m-input-icon">
@@ -52,7 +52,8 @@
 			focus: {
 				type: [Boolean, String],
 				default: false
-			}
+			},
+			maxlength:Number
 		},
 		model: {
 			prop: 'value',
@@ -83,7 +84,11 @@
 			},
 			focus_() {
 				return String(this.focus) !== 'false'
-			}
+			},
+			max() {				
+				const maxlength = this.maxlength
+				return maxlength ? maxlength:140 ;
+			},
 		},
 		methods: {
 			clear() {

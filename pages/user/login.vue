@@ -3,7 +3,7 @@
 		<view class="input-group">
 			<view class="input-row border">
 				<text class="title">账号：</text>
-				<m-input class="m-input" type="text" clearable focus v-model="UserCode" placeholder="请输入账号"></m-input>
+				<m-input class="m-input" :maxlength="11" type="text" clearable focus v-model="UserCode" placeholder="请输入账号"></m-input>
 			</view>
 			<view class="input-row">
 				<text class="title">密码：</text>
@@ -11,7 +11,7 @@
 			</view>
 		</view>
 		<view class="btn-row">
-			<button type="primary" class="primary" @tap="bindLogin">登录</button>
+			<button type="primary" class="primary" @tap="bindLogin">登 录</button>
 		</view>
 		<view class="action-row">
 			<navigator url="/pages/user/reg">注册账号</navigator>
@@ -28,6 +28,7 @@
 
 <script>	
 	var service = require('../../common/service.js');	
+	var util = require('../../common/util.js');
 	import mInput from '@/components/m-input.vue'
 
 	export default {
@@ -46,22 +47,14 @@
 		},
 		methods: {
 			initPosition() {
-				/**
-				 * 使用 absolute 定位，并且设置 bottom 值进行定位。软键盘弹出时，底部会因为窗口变化而被顶上来。
-				 * 反向使用 top 进行定位，可以避免此问题。
-				 */
 				this.positionTop = uni.getSystemInfoSync().windowHeight - 100;
 			},
 			bindLogin() {
-				/**
-				 * 客户端对账号信息进行一些必要的校验。
-				 * 实际开发中，根据业务需要进行处理，这里仅做示例。
-				 */
 				var ths=this;
-				if (this.UserCode.length < 5) {
+				if (!util.isPoneAvailable(ths.UserCode)) {
 					uni.showToast({
 						icon: 'none',
-						title: '账号最短为 5 个字符'
+						title: '账号输入有误'
 					});
 					return;
 				}
@@ -72,11 +65,6 @@
 					});
 					return;
 				}
-				/**
-				 * 下面简单模拟下服务端的处理
-				 * 检测用户账号密码是否在已注册的用户列表中
-				 * 实际开发中，使用 uni.request 将账号信息发送至服务端，客户端在回调函数中获取结果信息。
-				 */
 				var data = {
 					UserCode: this.UserCode,
 					PassWord: this.PassWord
@@ -98,16 +86,6 @@
 						}
 					}
 				})
-				
-				// const validUser = service.ajax(data);
-				// if (validUser) {
-				// 	this.toMain(this.account);
-				// } else {
-				// 	uni.showToast({
-				// 		icon: 'none',
-				// 		title: '用户账号或密码不正确',
-				// 	});
-				// }
 			},
 			oauth(value) {
 				uni.login({
@@ -116,10 +94,6 @@
 						uni.getUserInfo({
 							provider: value,
 							success: (infoRes) => {
-								/**
-								 * 实际开发中，获取用户信息后，需要将信息上报至服务端。
-								 * 服务端可以用 userInfo.openId 作为用户的唯一标识新增或绑定用户信息。
-								 */
 								this.toMain(infoRes.userInfo.nickName);
 							}
 						});
@@ -130,8 +104,8 @@
 				});
 			},
 			toMain() {
-				uni.reLaunch({
-					url: '../main/main',
+				uni.switchTab({
+					url: '/pages/main/main',
 				});
 			}
 		},

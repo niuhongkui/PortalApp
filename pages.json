@@ -36,17 +36,14 @@
 		}, {
 			"path": "pages/user/login",
 			"style": {
-				"navigationBarTitleText": "登录"
 			}
 		}, {
 			"path": "pages/user/reg",
 			"style": {
-				"navigationBarTitleText": "注册"
 			}
 		}, {
 			"path": "pages/user/pwd",
 			"style": {
-				"navigationBarTitleText": "找回密码"
 			}
 		}, {
 			"path": "pages/user/user",
