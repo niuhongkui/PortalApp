@@ -13,8 +13,11 @@
 		computed: {
 
 		},
+		onLoad() {
+			
+		},
 		onShow() {
-			var userinfo = service.getState();
+			var userinfo = service.getUser();
 			if (!userinfo) {
 				this.bindLogin();
 			}
@@ -28,7 +31,7 @@
 			bindLogout() {
 				service.loginOut();
 				uni.reLaunch({
-					url: '../user/login',
+					url: '/pages/user/login',
 				});
 			}
 		}

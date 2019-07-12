@@ -1,5 +1,5 @@
 const USERS_KEY = 'App_User_Key';
-const apiUrl = "http://localhost:80";
+const apiUrl = "http://localhost:81";
 const ajax = (opt) => {
 	opt = opt || {};
 	opt.url = opt.url || '';
@@ -40,13 +40,9 @@ const loginOut = function() {
 	uni.setStorageSync(USERS_KEY, undefined);
 }
 
-const getState=function(){
+const getUser = function() {
 	var user = uni.getStorageSync(USERS_KEY);
-	if(user){
-		return true;
-	}else{
-		return false;
-	}
+	return user;
 }
 
 
@@ -55,5 +51,5 @@ module.exports = {
 	apiUrl,
 	login,
 	loginOut,
-	getState
+	getUser
 }

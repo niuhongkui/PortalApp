@@ -135,10 +135,10 @@
 				});
 			}
 		},
-		onBackPress: function(options) {
-			uni.navigateBack({
-				delta: 2
-			});
+		onBackPress: function(options) {			
+			uni.switchTab({
+				url:"/pages/main/main"
+			})
 			return true;
 		},
 		onReady() {
