@@ -5,10 +5,10 @@
 			<image class="bg" src="/static/user-bg.jpg"></image>
 			<view class="user-info-box">
 				<view class="portrait-box">
-					<image class="portrait" :src="userInfo.portrait || '/static/missing-face.png'"></image>
+					<image class="portrait" :src="userInfo.ImageUrl || '/static/missing-face.png'"></image>
 				</view>
 				<view class="info-box">
-					<text class="username">{{userInfo.nickname || '游客'}}</text>
+					<text class="username">{{userInfo.UserName || '游客'}}</text>
 				</view>
 			</view>
 			<view class="vip-card-box">
@@ -97,7 +97,8 @@
     </view>  
 </template>  
 <script>  
-	import listCell from '@/components/mix-list-cell';
+	import listCell from '@/components/mix-list-cell';	
+	var config = require('../../common/config.js');
     import {  
         mapState 
     } from 'vuex';  

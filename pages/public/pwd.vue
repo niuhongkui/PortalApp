@@ -7,12 +7,16 @@
 		<view class="wrapper">
 			<view class="left-top-sign">LOGIN</view>
 			<view class="welcome">
-				欢迎回来！
+				欢迎注册！
 			</view>
 			<view class="input-content">
 				<view class="input-item">
 					<text class="tit">手机号码</text>
-					<input type="number" v-model="UserCode" placeholder="请输入手机号码" maxlength="11"   />
+					<input type="number" v-model="UserCode" placeholder="请输入手机号码" maxlength="11"   />					
+				</view>
+				<view class="input-item">
+					<text class="tit">验证码</text>
+					<input type="number"  placeholder="请输入6位验证码"  maxlength="6" v-model="VerifyCode"  />
 				</view>
 				<view class="input-item">
 					<text class="tit">密码</text>
@@ -20,14 +24,13 @@
 					 password  v-model="PassWord"  @confirm="toLogin" />
 				</view>
 			</view>
-			<button class="confirm-btn" @click="toLogin" :disabled="logining">登录</button>
+			<button class="confirm-btn" @click="toLogin" :disabled="logining">注册</button>
 			<view class="forget-section">
-				忘记密码?
+			
 			</view>
 		</view>
 		<view class="register-section">
-			还没有账号?
-			<text @click="toRegist">马上注册</text>
+			
 		</view>
 	</view>
 </template>
@@ -43,6 +46,10 @@
 			return {
 				UserCode: '',
 				PassWord: '',
+				VerifyCode: '',
+				disabled: false,
+				btnTxt: 0,
+				InterValObj: {},
 				logining: false
 			}
 		},
@@ -55,9 +62,7 @@
 				uni.navigateBack();
 			},
 			toRegist() {
-				uni.navigateTo({
-					url: '/pages/public/reg'
-				})
+				this.$api.msg('去注册');
 			},
 			toLogin() {
 				var ths = this;				
