@@ -15,7 +15,7 @@ function formatTime(time) {
 	}).join(':')
 }
 
-function formatLocation(longitude, latitude) {
+function formatLocation(longitude, latitude) {	
 	if (typeof longitude === 'string' && typeof latitude === 'string') {
 		longitude = parseFloat(longitude)
 		latitude = parseFloat(latitude)
@@ -29,6 +29,7 @@ function formatLocation(longitude, latitude) {
 		latitude: latitude.toString().split('.')
 	}
 }
+
 var dateUtils = {
 	UNITS: {
 		'年': 31557600000,
@@ -65,9 +66,10 @@ var dateUtils = {
 		return new Date(a[0], a[1] - 1, a[2], a[3], a[4], a[5]);
 	}
 };
-var isPoneAvailable = function(pone) {
+
+function checkPhone(str){
 	var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
-	if (!myreg.test(pone)) {
+	if (!myreg.test(str)) {
 		return false;
 	} else {
 		return true;
@@ -78,5 +80,5 @@ module.exports = {
 	formatTime: formatTime,
 	formatLocation: formatLocation,
 	dateUtils: dateUtils,
-	isPoneAvailable
+	checkPhone:checkPhone
 }

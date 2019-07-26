@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import store from './store'
 import App from './App'
-
+var config = require('./common/config.js');
 import Json from './Json' //测试用数据
 /**
  *  因工具函数属于公司资产, 所以直接在Vue实例挂载几个常用的函数
@@ -31,10 +31,6 @@ const json = type=>{
 	})
 }
 
-const config={
-		url:"http://localhost:81",
-		userKey:'App_User_Key'
-	}
 
 const ajax = (opt) => {
 	opt = opt || {};
@@ -80,7 +76,7 @@ const prePage = ()=>{
 Vue.config.productionTip = false
 Vue.prototype.$fire = new Vue();
 Vue.prototype.$store = store;
-Vue.prototype.$api = {msg, json, prePage};
+Vue.prototype.$api = {msg, json, prePage,ajax};
 
 App.mpType = 'app'
 
