@@ -9,9 +9,9 @@
 			</view>
 		</view>
 		<view class="history-section icon">
-			<list-cell  @eventClick="editName()" icon="icon-weixin" title="名称" :tips="userInfo.UserName" navigateType=""></list-cell>
-			<list-cell   icon="icon-dianhua-copy" title="账号" :tips="userInfo.UserCode" navigateType=""></list-cell>
-			<list-cell  @eventClick="goPay()" icon="icon-iconfontweixin"  title="会员信息" tips="您还不是会员" navigateType=""></list-cell>
+			<list-cell @eventClick="editName()" icon="icon-weixin" title="名称" :tips="userInfo.UserName" navigateType=""></list-cell>
+			<list-cell icon="icon-dianhua-copy" title="账号" :tips="userInfo.UserCode" navigateType=""></list-cell>
+			<list-cell @eventClick="goPay()" icon="icon-iconfontweixin" title="会员信息" tips="您还不是会员" navigateType=""></list-cell>
 		</view>
 	</view>
 </template>
@@ -43,12 +43,29 @@
 
 			},
 			editImg: function() {
+				uni.chooseImage({
+					count: 1, //默认9
+					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					sourceType: ['album', 'camera'], //从相册选择
+					success: function(res) {
+						const tempFilePaths = res.tempFilePaths;
+						uni.uploadFile({
+							url: config.url + '/api/userinfo/uploadimg/img', //仅为示例，非真实的接口地址
+							filePath: tempFilePaths[0],
+							name: 'file',
+							formData: {},
+							success: (uploadFileRes) => {
+								console.log(uploadFileRes.data);
+							}
+						});
+					}
+				});
 				this.$api.msg("修改图片")
 			},
 			editName: function() {
 				this.$api.msg("修改名称")
 			},
-			goPay:function(){
+			goPay: function() {
 				this.$api.msg("购买会员")
 			}
 		}
