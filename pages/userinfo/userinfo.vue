@@ -43,6 +43,7 @@
 
 			},
 			editImg: function() {
+				var ths = this;
 				uni.chooseImage({
 					count: 1, //默认9
 					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
@@ -53,14 +54,23 @@
 							url: config.url + '/api/userinfo/uploadimg/img', //仅为示例，非真实的接口地址
 							filePath: tempFilePaths[0],
 							name: 'file',
+							header: {
+								"Content-Type": "application/json",
+								Authorization: "Auth " + ths.userInfo.Token
+							},
 							formData: {},
-							success: (uploadFileRes) => {
-								console.log(uploadFileRes.data);
+							success: (uploadFileRes) => {	
+								var fileRes=JSON.parse(uploadFileRes.data) ;		
+														
+								if (fileRes.Success) {
+
+								} else {
+									ths.$api.msg(fileRes.Msg)		
+								}
 							}
 						});
 					}
 				});
-				this.$api.msg("修改图片")
 			},
 			editName: function() {
 				this.$api.msg("修改名称")
