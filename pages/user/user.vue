@@ -5,7 +5,7 @@
 			<image class="bg" src="/static/user-bg.jpg"></image>
 			<view class="user-info-box">
 				<view class="portrait-box">
-					<image class="portrait" :src="userInfo.ImageUrl || '/static/missing-face.png'"></image>
+					<image class="portrait" :src="config.url +(userInfo.ImageUrl||'/images/missing-face.png')"></image>
 				</view>
 				<view class="info-box">
 					<text class="username">{{userInfo.UserName || '游客'}}</text>
@@ -39,8 +39,8 @@
 			
 			<view class="tj-sction">
 				<view class="tj-item">
-					<text class="num">128.8</text>
-					<text>余额</text>
+					<text class="num">1</text>
+					<text> 会员天数</text>
 				</view>
 				<view class="tj-item">
 					<text class="num">0</text>
@@ -112,6 +112,7 @@
 				coverTransform: 'translateY(0px)',
 				coverTransition: '0s',
 				moving: false,
+				config:config
 			}
 		},
 		onLoad(){

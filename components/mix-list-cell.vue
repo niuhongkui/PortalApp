@@ -11,8 +11,9 @@
 				:class="icon"
 			></text>
 			<text class="cell-tit clamp">{{title}}</text>
-			<text v-if="tips" class="cell-tip">{{tips}}</text>
-			<text class="cell-more yticon"
+			<text v-if="tips&&!textOrInput" class="cell-tip">{{tips}}</text>
+			<input v-if="textOrInput" type="text" class="cell-tip"  v-model="tips"/>
+			<text v-if="!navigateType" class="cell-more yticon"
 				:class="typeList[navigateType]"
 			></text>
 		</view>
@@ -48,6 +49,10 @@
 			tips: {
 				type: String,
 				default: ''
+			},
+			textOrInput:{
+				type:Number,
+				default: 0
 			},
 			navigateType: {
 				type: String,
