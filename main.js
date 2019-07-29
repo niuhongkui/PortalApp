@@ -57,6 +57,7 @@ const ajax = (opt) => {
 			opt.success(res);
 		},
 		fail: function() {
+			opt.fail();
 			uni.showToast({
 				title: '请稍后重试'
 			});

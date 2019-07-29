@@ -7,22 +7,22 @@
 		<view class="wrapper">
 			<view class="left-top-sign">LOGIN</view>
 			<view class="welcome">
-				欢迎回来！
+				
 			</view>
 			<view class="input-content">
 				<view class="input-item">
 					<text class="tit">手机号码</text>
-					<input type="number" v-model="UserCode" placeholder="请输入手机号码" maxlength="11"   />
+					<input type="number" style="border: 1px solid #D4D4D4; border-radius: 5px;" v-model="UserCode" placeholder="请输入手机号码" maxlength="11"   />
 				</view>
 				<view class="input-item">
 					<text class="tit">密码</text>
-					<input type="password"  placeholder="8-18位不含特殊字符的数字、字母组合" placeholder-class="input-empty" maxlength="20"
+					<input type="password" style="border: 1px solid #D4D4D4; border-radius: 5px;"  placeholder="6-18位不含特殊字符的数字、字母组合" placeholder-class="input-empty" maxlength="20"
 					 password  v-model="PassWord"  @confirm="toLogin" />
 				</view>
 			</view>
 			<button class="confirm-btn" @click="toLogin" :disabled="logining">登录</button>
-			<view class="forget-section">
-				忘记密码?
+			<view class="forget-section">				
+				<text @click="toResetPwd">忘记密码?</text>
 			</view>
 		</view>
 		<view class="register-section">
@@ -57,6 +57,10 @@
 			toRegist() {
 				uni.navigateTo({
 					url: '/pages/public/reg'
+				})
+			},toResetPwd() {
+				uni.navigateTo({
+					url: '/pages/public/pwd'
 				})
 			},
 			toLogin() {
@@ -95,6 +99,9 @@
 							ths.$api.msg(res.Msg);
 							ths.logining = false;
 						}
+					},
+					fail:function(){
+						ths.logining = false;
 					}
 				})
 			}

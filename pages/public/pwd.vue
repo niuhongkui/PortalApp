@@ -7,24 +7,27 @@
 		<view class="wrapper">
 			<view class="left-top-sign">LOGIN</view>
 			<view class="welcome">
-				欢迎注册！
+				找回密码
 			</view>
 			<view class="input-content">
 				<view class="input-item">
 					<text class="tit">手机号码</text>
-					<input type="number" v-model="UserCode" placeholder="请输入手机号码" maxlength="11"   />					
+					<view style="display: flex;flex-direction:row;width: 100%; ">
+						<input type="number" style="border: 1px solid #D4D4D4; border-radius: 5px;"  v-model="UserCode" placeholder="请输入手机号码" maxlength="11"   />
+						<button @click="getVerifyCode" :disabled="disabled" style="width: 200upx;text-align: center;" class="uni-input-input"><span v-if="btnTxt>0">{{btnTxt}}s</span><span v-else>验证码</span></button>
+					</view>			
 				</view>
 				<view class="input-item">
 					<text class="tit">验证码</text>
-					<input type="number"  placeholder="请输入6位验证码"  maxlength="6" v-model="VerifyCode"  />
+					<input type="number" style="border: 1px solid #D4D4D4;border-radius: 5px;"  placeholder="请输入6位验证码"  maxlength="6" v-model="VerifyCode"  />
 				</view>
 				<view class="input-item">
 					<text class="tit">密码</text>
-					<input type="password"  placeholder="8-18位不含特殊字符的数字、字母组合" placeholder-class="input-empty" maxlength="20"
-					 password  v-model="PassWord"  @confirm="toLogin" />
+					<input type="password" style="border: 0.5px solid #D4D4D4;border-radius: 5px;"   placeholder="6-18位不含特殊字符的数字、字母组合" placeholder-class="input-empty" maxlength="20"
+					 password  v-model="PassWord"  @confirm="editPwd" />
 				</view>
 			</view>
-			<button class="confirm-btn" @click="toLogin" :disabled="logining">注册</button>
+			<button class="confirm-btn" @click="editPwd" :disabled="logining">注册</button>
 			<view class="forget-section">
 			
 			</view>
@@ -61,48 +64,103 @@
 			navBack() {
 				uni.navigateBack();
 			},
-			toRegist() {
-				this.$api.msg('去注册');
+			getVerifyCode() {
+				var ths = this;
+				if (!util.checkPhone(ths.UserCode)) {
+					ths.$api.msg('手机号有误')
+					return;
+				}
+				ths.disabled = true;
+				ths.btnTxt = 120;
+				ths.InterValObj = window.setInterval(ths.SetRemainTime, 1000); //启动计时器，1秒执行一次
+				ths.$api.ajax({
+					url: "/api/userinfo/VerifyCode/in?strPhone="+ths.UserCode,
+					success: function(json) {
+						var res = json.data;
+						if(res.Success){
+							uni.showToast({
+								icon: 'success',
+								title: res.Msg
+							});
+						}else{
+							uni.showToast({
+								icon: 'none',
+								title: res.Msg
+							});
+						}
+					}
+				})
 			},
-			toLogin() {
-				var ths = this;				
-				/* 数据验证模块*/
+			SetRemainTime() {
+				var ths = this;
+				if (ths.btnTxt == 0) {
+					window.clearInterval(ths.InterValObj); //停止计时器
+					ths.disabled = false;
+				} else {
+					ths.btnTxt--;
+				}
+			},
+			editPwd() {
+				var ths = this;
 				if (!util.checkPhone(ths.UserCode)) {
 					uni.showToast({
 						icon: 'none',
-						title: '账号输入有误'
+						title: '手机号有误'
+					});
+					return;
+				}
+				if (ths.VerifyCode.length < 6) {
+					uni.showToast({
+						icon: 'none',
+						title: '验证码为 6 位数字'
 					});
 					return;
 				}
 				if (this.PassWord.length < 6) {
 					uni.showToast({
 						icon: 'none',
-						title: '密码最短为 6 个字符'
+						title: '密码长度至少为 6 位字符'
 					});
 					return;
 				}
-				var data = {
+
+				const data = {
 					UserCode: this.UserCode,
+					VerifyCode: this.VerifyCode,
 					PassWord: this.PassWord
-				};
-				
-				this.logining = true;
+				}
+				ths.logining = true;
 				ths.$api.ajax({
-					url:"/api/userinfo/loginon/in",
-					data:data,
-					method:"POST",
-					success:function(json){
-						var res=json.data;
-						if(res.Success){
-							ths.login(res.Data);
-							uni.navigateBack();
-						}else{							
-							ths.$api.msg(res.Msg);
+					url: "/api/userinfo/EditPassWord/user",
+					data: data,
+					method: "POST",
+					success: function(json) {
+						var res = json.data;
+						if (res.Success) {
+							ths.$api.ajax({
+								url: "/api/userinfo/loginon/in",
+								data: data,
+								method: "POST",
+								success: function(ijson) {
+									var ires = ijson.data;
+									ths.login(ires.Data);									
+									ths.logining = false;
+									uni.switchTab({
+										url: "/pages/index/index"
+									})
+								}
+							})
+						} else {
 							ths.logining = false;
+							uni.showToast({
+								title: res.Msg,
+								icon: "none"
+							});
 						}
 					}
-				})
-			}
+				});
+
+			}			
 		},
 
 	}

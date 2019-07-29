@@ -6,23 +6,31 @@
 	import {
 		mapMutations
 	} from 'vuex';
-	
+
 	export default {
 		methods: {
 			...mapMutations(['login'])
 		},
 		onLaunch: function() {
-			let userInfo = uni.getStorageSync(config.userKey) || '';
-			if(userInfo.id){
-				//更新登陆状态
-				uni.getStorage({
-					key: config.userKey,
-					success: (res) => {
-						this.login(res.data);
-					}
-				});
-			}
+			var ths = this;
 			
+			let userInfo = uni.getStorageSync(config.userKey) || '';
+			if (userInfo.Id) {
+				//更新登陆状态
+				uni.request({
+					data: {
+						UserCode: userInfo.UserCode,
+						PassWord: userInfo.Token
+					},
+					method: "POST",
+					url: config.url + "/api/userinfo/LoginByToken/on",
+					success: function(res) {						
+						if (res.data.Success)
+							ths.login(res.data.Data);
+					}
+				})
+			}
+
 		},
 		onShow: function() {
 			console.log('App Show')
@@ -366,6 +374,7 @@
 	video {
 		box-sizing: border-box;
 	}
+
 	/* 骨架屏替代方案 */
 	.Skeleton {
 		background: #f3f3f3;
