@@ -50,7 +50,6 @@
 			...mapMutations(['hasLogin','logout']),
 
 			navTo(url){
-				// this.$api.msg(`跳转到${url}`);
 				if(!this.hasLogin){
 					url = '/pages/public/login';
 				}

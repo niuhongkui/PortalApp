@@ -33,7 +33,7 @@
 			};
 		},
 		computed: {
-			...mapState(['userInfo']),
+			...mapState(['userInfo','login']),
 		},
 		onShow: function() {
 			this.init();
@@ -55,17 +55,16 @@
 							filePath: tempFilePaths[0],
 							name: 'file',
 							header: {
-								"Content-Type": "application/json",
-								Authorization: "Auth " + ths.userInfo.Token
+								"Authorization": "Auth " + ths.userInfo.Token
 							},
 							formData: {},
-							success: (uploadFileRes) => {	
-								var fileRes=JSON.parse(uploadFileRes.data) ;		
-														
+							success: (uploadFileRes) => {
+								var fileRes = JSON.parse(uploadFileRes.data);
 								if (fileRes.Success) {
-
+									ths.userInfo.ImageUrl=fileRes.Data;
+									ths.login(ths.userInfo);
 								} else {
-									ths.$api.msg(fileRes.Msg)		
+									ths.$api.msg(fileRes.Msg)
 								}
 							}
 						});
