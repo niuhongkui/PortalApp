@@ -36,16 +36,24 @@
 		},
 		methods: {
 			async loadData(){
-				let list = await this.$api.json('cateList');
-				list.forEach(item=>{
-					if(!item.pid){
-						this.flist.push(item);  //pid为父级id, 没有pid或者pid=0是一级分类
-					}else if(!item.picture){
-						this.slist.push(item); //没有图的是2级分类
-					}else{
-						this.tlist.push(item); //3级分类
+				var ths=this;
+				this.$api.ajax({
+					url:"/api/product/getcate/type",
+					success:function(json){						
+						var res=json.data;						
+						var list=res.Data;
+						list.forEach(item=>{
+							if(!item.pid){
+								ths.flist.push(item);  //pid为父级id, 没有pid或者pid=0是一级分类
+								ths.slist.push(item); //没有图的是2级分类
+							// }else if(!item.picture){
+							// 	this.slist.push(item); //没有图的是2级分类
+							}else{
+								ths.tlist.push(item); //3级分类
+							}
+						}) 
 					}
-				}) 
+				});				
 			},
 			//一级分类点击
 			tabtap(item){
