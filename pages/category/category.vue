@@ -9,8 +9,8 @@
 			<view v-for="item in slist" :key="item.id" class="s-list" :id="'main-'+item.id">
 				<text class="s-item">{{item.name}}</text>
 				<view class="t-list">
-					<view @click="navToList(item.id, titem.id)" v-if="titem.pid === item.id" class="t-item" v-for="titem in tlist" :key="titem.id">
-						<image :src="titem.picture"></image>
+					<view @click="navToList(item.id, titem.id)"  v-if="titem.pid == item.id" class="t-item" v-for="titem in tlist" :key="titem.id">
+						<image :src="config.url + (titem.picture||'/images/missing-face.png')"></image>
 						<text>{{titem.name}}</text>
 					</view>
 				</view>
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+	var config = require('../../common/config.js');
 	export default {
 		data() {
 			return {
@@ -29,6 +30,7 @@
 				flist: [],
 				slist: [],
 				tlist: [],
+				config: config
 			}
 		},
 		onLoad(){

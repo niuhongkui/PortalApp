@@ -44,7 +44,7 @@ const ajax = (opt) => {
 	}
 	opt.header = opt.header || {
 		"Content-Type": "application/json",
-		"Authorization": token
+		"Authorization":"Auth " + token
 	};
 	opt.success = opt.success || function() {};
 	uni.request({
