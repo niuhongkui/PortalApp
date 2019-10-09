@@ -22,7 +22,15 @@ const ajax = (opt) => {
 		header: opt.header,
 		dataType: 'json',
 		success: function(res) {
-			opt.success(res);
+			var json=res.data;						
+			if(json.Success){				
+				opt.success(res);
+			}else{
+				console.log(res)
+				uni.showToast({
+					title: json.Msg?json.Msg:"请稍后重试"
+				});
+			}
 		},
 		fail: function() {
 			uni.showToast({
