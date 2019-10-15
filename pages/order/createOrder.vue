@@ -1,15 +1,15 @@
 <template>
 	<view>
 		<!-- 地址 -->
-		<navigator url="/pages/address/address?source=1" class="address-section">
+		<navigator url="" class="address-section">
 			<view class="order-content">
 				<text class="yticon icon-shouhuodizhi"></text>
 				<view class="cen">
 					<view class="top">
-						<text class="name">{{addressData.name}}</text>
-						<text class="mobile">{{addressData.mobile}}</text>
+						<text class="name">到店自取</text>
+						<text class="mobile"></text>
 					</view>
-					<text class="address">{{addressData.address}} {{addressData.area}}</text>
+					<text class="address"></text>
 				</view>
 				<text class="yticon icon-you"></text>
 			</view>
@@ -19,21 +19,10 @@
 
 		<view class="goods-section">
 			<view class="g-header b-b">
-				<image class="logo" src="http://duoduo.qibukj.cn/./Upload/Images/20190321/201903211727515.png"></image>
-				<text class="name">西城小店铺</text>
+				<image class="logo" src=""></image>
+				<text class="name"></text>
 			</view>
 			<!-- 商品列表 -->
-			<view class="g-item">
-				<image src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=756705744,3505936868&fm=11&gp=0.jpg"></image>
-				<view class="right">
-					<text class="title clamp">古黛妃 短袖t恤女夏装2019新款</text>
-					<text class="spec">春装款 L</text>
-					<view class="price-box">
-						<text class="price">￥17.8</text>
-						<text class="number">x 1</text>
-					</view>
-				</view>
-			</view>
 			<view class="g-item">
 				<image src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1620020012,789258862&fm=26&gp=0.jpg"></image>
 				<view class="right">
@@ -54,17 +43,17 @@
 					券
 				</view>
 				<text class="cell-tit clamp">优惠券</text>
-				<text class="cell-tip active">
-					选择优惠券
+				<text class="cell-tip disabled">
+					无
 				</text>
 				<text class="cell-more wanjia wanjia-gengduo-d"></text>
 			</view>
 			<view class="yt-list-cell b-b">
 				<view class="cell-icon hb">
-					减
+					惠
 				</view>
-				<text class="cell-tit clamp">商家促销</text>
-				<text class="cell-tip disabled">暂无可用优惠</text>
+				<text class="cell-tit clamp">会员优惠</text>
+				<text :class="userInfo.IsMember==1?'cell-tip active':'cell-tip disabled'">{{userInfo.IsMember==1?'会员直降':'无'}}</text>
 			</view>
 		</view>
 		<!-- 金额明细 -->
@@ -79,7 +68,7 @@
 			</view>
 			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">运费</text>
-				<text class="cell-tip">免运费</text>
+				<text class="cell-tip">自取</text>
 			</view>
 			<view class="yt-list-cell desc-cell">
 				<text class="cell-tit clamp">备注</text>
@@ -124,24 +113,19 @@
 </template>
 
 <script>
+	import { mapState } from 'vuex';
+	var config = require('../../common/config.js');
 	export default {
 		data() {
 			return {
 				maskState: 0, //优惠券面板显示状态
 				desc: '', //备注
+				url:config.url,
 				payType: 1, //1微信 2支付宝
 				couponList: [
 					{
 						title: '新用户专享优惠券',
 						price: 5,
-					},
-					{
-						title: '庆五一发一波优惠券',
-						price: 10,
-					},
-					{
-						title: '优惠券优惠券优惠券优惠券',
-						price: 15,
 					}
 				],
 				addressData: {
@@ -151,13 +135,26 @@
 					address: '山东省济南市历城区',
 					area: '149号',
 					default: false,
-				}
+				},
+				orderList:[]
 			}
+		},
+		computed:{
+			...mapState(['userInfo'])
 		},
 		onLoad(option){
 			//商品数据
-			//let data = JSON.parse(option.data);
-			//console.log(data);
+			let data = JSON.parse(option.data);
+			var ths=this;
+			ths.$api.ajax({			
+				url: "/api/order/GetPrice/order",
+				method: "POST",
+				success: function(json) {
+					var res = json.data;
+					let list = res.Data;
+					console.log(list)
+				}
+			});
 		},
 		methods: {
 			//显示优惠券面板

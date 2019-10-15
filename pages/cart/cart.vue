@@ -21,7 +21,7 @@
 						:class="{'b-b': index!==cartList.length-1}"
 					>
 						<view class="image-wrapper">
-							<image :src="item.image" 
+							<image :src="url+item.ImgUrl" 
 								:class="[item.loaded]"
 								mode="aspectFill" 
 								lazy-load 
@@ -35,16 +35,16 @@
 							></view>
 						</view>
 						<view class="item-right">
-							<text class="clamp title">{{item.title}}</text>
-							<text class="attr">{{item.attr_val}}</text>
-							<text class="price">¥{{item.price}}</text>
+							<text class="clamp title">{{item.ProductName}}</text>
+							<text class="attr">{{item.UnitName}}</text>
+							<text class="price">¥{{item.Price}}</text>
 							<uni-number-box 
 								class="step"
 								:min="1" 
-								:max="item.stock"
-								:value="item.number>item.stock?item.stock:item.number"
-								:isMax="item.number>=item.stock?true:false"
-								:isMin="item.number===1"
+								:max="10"
+								:value="item.Amount>10?10:item.Amount"
+								:isMax="item.Amount>=10?true:false"
+								:isMin="item.Amount===1"
 								:index="index"
 								@eventChange="numberChange"
 							></uni-number-box>
@@ -69,7 +69,7 @@
 					<text class="price">¥{{total}}</text>
 					<text class="coupon">
 						已优惠
-						<text>74.35</text>
+						<text>{{offer}}</text>
 						元
 					</text>
 				</view>
@@ -80,10 +80,9 @@
 </template>
 
 <script>
-	import {
-		mapState
-	} from 'vuex';
-	import uniNumberBox from '@/components/uni-number-box.vue'
+	import { mapState } from 'vuex';
+	var config = require('../../common/config.js');
+	import uniNumberBox from '@/components/uni-number-box.vue';
 	export default {
 		components: {
 			uniNumberBox
@@ -91,12 +90,14 @@
 		data() {
 			return {
 				total: 0, //总价格
+				offer:0,//优化价格
 				allChecked: false, //全选状态  true|false
 				empty: false, //空白页现实  true|false
-				cartList: [],
+				url: config.url,
+				cartList: []
 			};
 		},
-		onLoad(){
+		onShow(){
 			this.loadData();
 		},
 		watch:{
@@ -109,18 +110,26 @@
 			}
 		},
 		computed:{
-			...mapState(['hasLogin'])
+			...mapState(['hasLogin','userInfo'])
 		},
 		methods: {
 			//请求数据
-			async loadData(){
-				let list = await this.$api.json('cartList'); 
-				let cartList = list.map(item=>{
-					item.checked = true;
-					return item;
-				});
-				this.cartList = cartList;
-				this.calcTotal();  //计算总价
+			loadData(){
+				var ths=this;
+				ths.$api.ajax({
+					url: "/api/order/CartList/cart",
+					method: "POST",
+					success: function(json) {
+						var res = json.data;
+						let list = res.Data;
+						let cartList = list.map(item=>{
+							item.checked = true;
+							return item;
+						});
+						ths.cartList = cartList;
+						ths.calcTotal();  //计算总价
+					}
+				})				
 			},
 			//监听image加载完成
 			onImageLoad(key, index) {
@@ -151,26 +160,53 @@
 			},
 			//数量
 			numberChange(data){
-				this.cartList[data.index].number = data.number;
+				this.cartList[data.index].Amount = data.number;
 				this.calcTotal();
 			},
 			//删除
 			deleteCartItem(index){
 				let list = this.cartList;
 				let row = list[index];
-				let id = row.id;
-
-				this.cartList.splice(index, 1);
-				this.calcTotal();
-				uni.hideLoading();
+				var ths=this;
+				ths.$api.ajax({
+					url: "/api/order/CartDel/"+row.ID,
+					success: function(json) {
+						var res = json.data;
+						if(res.Data){										
+							ths.cartList.splice(index, 1);
+							ths.calcTotal();
+							uni.hideLoading();
+						}else{
+							uni.showToast({
+								icon: 'none',
+								title: res.Msg
+							});	
+						}
+					}
+				})		
+				
 			},
 			//清空
 			clearCart(){
+				var ths=this;
 				uni.showModal({
 					content: '清空购物车？',
 					success: (e)=>{
 						if(e.confirm){
-							this.cartList = [];
+							ths.$api.ajax({
+								url: "/api/order/CartDel/all",
+								success: function(json) {
+									var res = json.data;
+									if(res.Data){										
+										ths.cartList = [];
+									}else{
+										uni.showToast({
+											icon: 'none',
+											title: res.Msg
+										});	
+									}
+								}
+							})		
 						}
 					}
 				})
@@ -183,16 +219,19 @@
 					return;
 				}
 				let total = 0;
+				let offer=0;
 				let checked = true;
 				list.forEach(item=>{
 					if(item.checked === true){
-						total += item.price * item.number;
+						total += item.Price * item.Amount;
+						offer += (item.OPrice-item.Price) * item.Amount;
 					}else if(checked === true){
 						checked = false;
 					}
 				})
 				this.allChecked = checked;
 				this.total = Number(total.toFixed(2));
+				this.offer = Number(offer.toFixed(2));
 			},
 			//创建订单
 			createOrder(){
@@ -201,8 +240,9 @@
 				list.forEach(item=>{
 					if(item.checked){
 						goodsData.push({
-							attr_val: item.attr_val,
-							number: item.number
+							Amount: item.Amount,
+							ProductID: item.ProductID,
+							UnitID:item.UnitID,
 						})
 					}
 				})
@@ -212,7 +252,6 @@
 						goodsData: goodsData
 					})}`
 				})
-				this.$api.msg('跳转下一页 sendData');
 			}
 		}
 	}
