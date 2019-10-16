@@ -44,7 +44,7 @@
 								:max="10"
 								:value="item.Amount>10?10:item.Amount"
 								:isMax="item.Amount>=10?true:false"
-								:isMin="item.Amount===1"
+								:isMin="item.Amount==1"
 								:index="index"
 								@eventChange="numberChange"
 							></uni-number-box>
@@ -214,6 +214,7 @@
 			//计算总价
 			calcTotal(){
 				let list = this.cartList;
+				var ths=this;
 				if(list.length === 0){
 					this.empty = true;
 					return;
@@ -224,7 +225,7 @@
 				list.forEach(item=>{
 					if(item.checked === true){
 						total += item.Price * item.Amount;
-						offer += (item.OPrice-item.Price) * item.Amount;
+						offer += item.OPrice* item.Amount;
 					}else if(checked === true){
 						checked = false;
 					}
@@ -243,13 +244,14 @@
 							Amount: item.Amount,
 							ProductID: item.ProductID,
 							UnitID:item.UnitID,
+							CartID:item.ID
 						})
 					}
 				})
 
 				uni.navigateTo({
 					url: `/pages/order/createOrder?data=${JSON.stringify({
-						goodsData: goodsData
+						GoodsData: goodsData
 					})}`
 				})
 			}

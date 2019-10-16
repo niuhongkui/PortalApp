@@ -2,7 +2,7 @@
 	<view class="app">
 		<view class="price-box">
 			<text>支付金额</text>
-			<text class="price">38.88</text>
+			<text class="price">{{money}}</text>
 		</view>
 
 		<view class="pay-type-list">
@@ -28,17 +28,6 @@
 					</radio>
 				</label>
 			</view>
-			<view class="type-item" @click="changePayType(3)">
-				<text class="icon yticon icon-erjiye-yucunkuan"></text>
-				<view class="con">
-					<text class="tit">预存款支付</text>
-					<text>可用余额 ¥198.5</text>
-				</view>
-				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType == 3' />
-					</radio>
-				</label>
-			</view>
 		</view>
 		
 		<text class="mix-btn" @click="confirm">确认支付</text>
@@ -51,14 +40,17 @@
 		data() {
 			return {
 				payType: 1,
-				orderInfo: {}
+				orderInfo: {},
+				orderNo:"",
+				money:0
 			};
 		},
 		computed: {
 		
 		},
 		onLoad(options) {
-			
+			this.money=options.money;
+			this.orderNo=options.orderno;
 		},
 
 		methods: {

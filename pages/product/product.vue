@@ -213,9 +213,18 @@
 					})
 				}
 			},
-			buy(){
+			buy(){	
+				var ths=this;
+				var goodsData=[];
+				goodsData.push({
+					Amount: 1,
+					ProductID: ths.id,
+					UnitID:ths.specSelected.ID,
+				});
 				uni.navigateTo({
-					url: `/pages/order/createOrder`
+					url: `/pages/order/createOrder?data=${JSON.stringify({
+						GoodsData: goodsData
+					})}`
 				})
 			},
 			addCart() {
