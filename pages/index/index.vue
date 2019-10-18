@@ -12,10 +12,10 @@
 			<!-- 标题栏和状态栏占位符 -->
 			<view class="titleNview-placing"></view>
 			<!-- 背景色区域 -->
-			<view class="titleNview-background" style="background-color: rgb(183, 73, 69);"></view>
+			<view class="titleNview-background" style="background-color: #AFEEEE;"></view>
 			<swiper class="carousel" circular @change="swiperChange">
 				<swiper-item v-for="(item, index) in carouselList" :key="index" class="carousel-item" @click="navToDetailPage({title: '轮播广告'})">
-					<image :src="item.src" />
+					<image :src="url+item.ImgUrl" />
 				</swiper-item>
 			</swiper>
 			<!-- 自定义swiper指示器 -->
@@ -27,19 +27,19 @@
 		</view>
 		<!-- 分类 -->
 		<view class="cate-section">
-			<view class="cate-item">
+			<view @click="goMore()" class="cate-item">
 				<image src="/static/temp/c3.png"></image>
 				<text>熟食</text>
 			</view>
-			<view class="cate-item">
+			<view @click="goMore()" class="cate-item">
 				<image src="/static/temp/c6.png"></image>
 				<text>健康</text>
 			</view>
-			<view class="cate-item">
+			<view @click="goMore()" class="cate-item">
 				<image src="/static/temp/c7.png"></image>
 				<text>速食</text>
 			</view>
-			<view class="cate-item">
+			<view @click="goMore()" class="cate-item">
 				<image src="/static/temp/c8.png"></image>
 				<text>生鲜</text>
 			</view>
@@ -63,13 +63,13 @@
 					<view 
 						v-for="(item, index) in goodsList" :key="index"
 						class="floor-item"
-						@click="navToDetailPage(item)"
+						@click="navToLike(item)"
 					>
-						<image :src="item.image" mode="aspectFill"></image>
+						<image :src="url+item.image" mode="aspectFill"></image>
 						<text class="title clamp">{{item.title}}</text>
 						<text class="price">￥{{item.price}}</text>
 					</view>
-					<view class="more">
+					<view class="more" @click="goMore()">
 						<text>查看全部</text>
 						<text>More+</text>
 					</view>
@@ -89,12 +89,12 @@
 		
 		<view class="guess-section">
 			<view 
-				v-for="(item, index) in []" :key="index"
+				v-for="(item, index) in goodsList" :key="index"
 				class="guess-item"
-				@click="navToDetailPage(item)"
+				@click="navToLike(item)"
 			>
 				<view class="image-wrapper">
-					<image :src="item.image" mode="aspectFill"></image>
+					<image :src="url+item.image" mode="aspectFill"></image>
 				</view>
 				<text class="title clamp">{{item.title}}</text>
 				<text class="price">￥{{item.price}}</text>
@@ -106,13 +106,14 @@
 </template>
 
 <script>
-
+	var config = require('../../common/config.js');
 	export default {
 
 		data() {
 			return {
 				titleNViewBackground: '',
 				swiperCurrent: 0,
+				url:config.url,
 				swiperLength: 0,
 				carouselList: [],
 				goodsList: []
@@ -127,29 +128,58 @@
 			 * 请求静态数据只是为了代码不那么乱
 			 * 分次请求未作整合
 			 */
-			async loadData() {
-				let carouselList = await this.$api.json('carouselList');
-				this.titleNViewBackground = carouselList[0].background;
-				this.swiperLength = carouselList.length;
-				this.carouselList = carouselList;
-				
-				let goodsList = await this.$api.json('goodsList');
-				this.goodsList = goodsList || [];
+			loadData() {
+				var ths=this;
+				ths.$api.ajax({
+					url:"/api/swiper/List/img",
+					success:function(json){						
+						var res=json.data;						
+						var list=res.Data;
+						if(res.Success){							
+							ths.carouselList =list;		
+							ths.swiperLength=list.length;
+						}
+					}
+				});	
+				ths.$api.ajax({
+					url:"/api/product/GetLikeGoods/like",
+					success:function(json){						
+						var res=json.data;						
+						var list=res.Data;
+						if(res.Success){							
+							ths.goodsList =list;		
+						}
+					}
+				});	
 			},
 			//轮播图切换修改背景色
 			swiperChange(e) {
 				const index = e.detail.current;
 				this.swiperCurrent = index;
-				this.titleNViewBackground = this.carouselList[index].background;
 			},
 			//详情页
 			navToDetailPage(item) {
 				//测试数据没有写id，用title代替
-				let id = item.title;
-				uni.navigateTo({
-					url: `/pages/product/product?id=${id}`
-				})
+				let id = item.ProductID;
+				if(id){
+					uni.navigateTo({
+						url: `/pages/product/product?id=${id}`
+					})					
+				}
 			},
+			navToLike(item){
+				let id = item.ID;
+				if(id){
+					uni.navigateTo({
+						url: `/pages/product/product?id=${id}`
+					})					
+				}
+			},
+			goMore(){
+				uni.switchTab({
+					url:'/pages/category/category'
+				})
+			}
 		},
 		// #ifndef MP
 		// 标题栏input搜索框点击
