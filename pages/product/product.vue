@@ -27,8 +27,8 @@
 			<view class="c-row b-b" @click="toggleSpec">
 				<text class="tit">购买类型</text>
 				<view class="con">
-					<text class="selected-text" v-for="(sItem, sIndex) in specSelected" :key="sIndex">
-						{{sItem.name}}
+					<text class="selected-text" >
+						{{specSelected.Name}} 
 					</text>
 				</view>
 				<text class="yticon icon-you"></text>
