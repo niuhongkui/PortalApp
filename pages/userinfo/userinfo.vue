@@ -33,12 +33,13 @@
 			};
 		},
 		computed: {
-			...mapState(['userInfo','login']),
+			...mapState(['userInfo', 'hasLogin']),
 		},
 		onShow: function() {
 			this.init();
 		},
 		methods: {
+			...mapMutations(['login', 'logout']),
 			init: function() {
 
 			},
@@ -61,7 +62,7 @@
 							success: (uploadFileRes) => {
 								var fileRes = JSON.parse(uploadFileRes.data);
 								if (fileRes.Success) {
-									ths.userInfo.ImageUrl=fileRes.Data;
+									ths.userInfo.ImageUrl = fileRes.Data;
 									ths.login(ths.userInfo);
 								} else {
 									ths.$api.msg(fileRes.Msg)

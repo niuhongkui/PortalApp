@@ -46,9 +46,11 @@
 				
 			};
 		},
+		computed: {
+			...mapState(['userInfo', 'hasLogin']),
+		},
 		methods:{
-			...mapMutations(['hasLogin','logout']),
-
+			...mapMutations(['login','logout']),
 			navTo(url){
 				if(!this.hasLogin){
 					url = '/pages/public/login';
