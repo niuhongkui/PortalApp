@@ -51,7 +51,7 @@
             <view class="yt-list-cell b-b">
                 <view class="cell-icon hb">惠</view>
                 <text class="cell-tit clamp">会员优惠</text>
-                <text :class="userInfo.IsMember == 1 ? 'cell-tip active' : 'cell-tip disabled'">{{ userInfo.IsMember == 1 ? '会员直降' : '无' }}</text>
+                <text :class="userInfo.IsMember > 0 ? 'cell-tip active' : 'cell-tip disabled'">{{ userInfo.IsMember >0 ? '会员直降' : '无' }}</text>
             </view>
         </view>
         <!-- 金额明细 -->

@@ -40,7 +40,7 @@
 			</navigator>
 			<view class="p-b-text">
 				<view class="p-b-price">¥{{ money +"  " }} <text class="p-b-ori"> ¥{{ oriMoney }}</text></text></view>
-				<view>另需配送费¥5</view>
+				<view>另需配送费¥{{sendMoney}}</view>
 			</view>
 			<view class="action-btn-group"><button type="primary" class=" action-btn no-border buy-now-btn" @click="buy">去结算</button></view>
 		</view>
@@ -67,7 +67,8 @@
 				slist: [],
 				money: 0,
 				oriMoney: 0,
-				config: config
+				config: config,
+				sendMoney:4
 			};
 		},
 		onLoad() {
@@ -99,11 +100,20 @@
 						cartlist.forEach(n => {
 							ths.oriMoney = ths.oriMoney + n.Price*n.SelectAmount;
 							if(ths.hasLogin){								
-								ths.money = ths.money +(ths.userInfo.IsMember==1?n.MemberPrice:n.Price)*n.SelectAmount;
+								ths.money = ths.money +(ths.userInfo.IsMember>0?n.MemberPrice:n.Price)*n.SelectAmount;
 							}else{
 								ths.money=ths.oriMoney;
 							}
 						});
+						if (ths.money >= 50) {
+						    ths.sendMoney = 0;
+						}
+						if (ths.money < 50) {
+						    ths.sendMoney = 2;
+						}
+						if (ths.money < 20) {
+						    ths.sendMoney = 4;
+						}
 					}
 				});
 			},
@@ -154,7 +164,7 @@
 				var ths = this;
 				if(!ths.hasLogin){
 					uni.navigateTo({
-						url: `/pages/public/login`
+						url: `/pages/public/login?back=1`
 					})
 					return;
 				}
@@ -183,7 +193,7 @@
 				ths.money=0;
 				ths.oriMoney =0;
 				list.forEach(n => {
-					ths.money = ths.money +(this.userInfo.IsMember==1?n.MemberPrice:n.Price)*n.SelectAmount;
+					ths.money = ths.money +(this.userInfo.IsMember>0?n.MemberPrice:n.Price)*n.SelectAmount;
 					ths.oriMoney = ths.oriMoney + n.Price*n.SelectAmount;
 				});				
 			},

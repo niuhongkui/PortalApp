@@ -142,7 +142,7 @@
 			},
 			navToLogin(){
 				uni.navigateTo({
-					url: '/pages/public/login'
+					url: '/pages/public/login?back=1'
 				})
 			},
 			 //选中状态处理

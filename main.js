@@ -56,7 +56,7 @@ const ajax = (opt) => {
 		success: function(res) {
 			if(res.statusCode=='401'){
 				uni.navigateTo({
-					url: '/pages/public/login'
+					url: '/pages/public/login?back=1'
 				})
 				return;
 			}

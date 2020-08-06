@@ -222,7 +222,7 @@
 					})
 				} else {
 					uni.navigateTo({
-						url: `/pages/public/login`
+						url: `/pages/public/login?back=1`
 					})
 				}
 			},

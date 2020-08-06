@@ -50,7 +50,7 @@
 			...mapMutations(['login', 'logout']),
 			navTo(url) {
 				if (!this.hasLogin) {
-					url = '/pages/public/login';
+					url = '/pages/public/login?back=1';
 				}
 				uni.navigateTo({
 					url

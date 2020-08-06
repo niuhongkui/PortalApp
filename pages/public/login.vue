@@ -43,11 +43,12 @@
 			return {
 				UserCode: '',
 				PassWord: '',
-				logining: false
+				logining: false,
+				back:0
 			}
 		},
-		onLoad() {
-
+		onLoad(opt) {
+			this.back=opt.back;
 		},
 		methods: {
 			...mapMutations(['login']),
@@ -94,13 +95,18 @@
 						var res=json.data;
 						if(res.Success){
 							ths.login(res.Data);
-							uni.navigateBack();
+							debugger
+							if(ths.back==1)
+								uni.navigateBack();
+							else
+								uni.switchTab({
+									url:'/pages/category/category'
+								})
 						}else{							
 							ths.$api.msg(res.Msg);
-							ths.logining = false;
 						}
 					},
-					fail:function(){
+					complete:function(){
 						ths.logining = false;
 					}
 				})

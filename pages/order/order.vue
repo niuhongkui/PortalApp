@@ -21,12 +21,12 @@
 							<text v-if="item.State=='已关闭'" class="del-btn yticon icon-iconfontshanchu1" @click="deleteOrder(item.OrderNo)"></text>
 						</view>
 
-						<scroll-view v-if="item.Detail.length > 1" class="goods-box" scroll-x>
+						<!-- <scroll-view v-if="item.Detail.length > 1" class="goods-box" scroll-x>
 							<view v-for="(goodsItem, goodsIndex) in item.Detail" :key="goodsIndex" class="goods-item">
 								<image class="goods-img" :src="url+goodsItem.Url" mode="aspectFill"></image>
 							</view>
-						</scroll-view>
-						<view v-if="item.Detail.length === 1" class="goods-box-single" v-for="(goodsItem, goodsIndex) in item.Detail"
+						</scroll-view> -->
+						<view  class="goods-box-single" v-for="(goodsItem, goodsIndex) in item.Detail"
 						 :key="goodsIndex">
 							<image class="goods-img" :src="url+goodsItem.Url" mode="aspectFill"></image>
 							<view class="right">
