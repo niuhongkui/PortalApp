@@ -1,5 +1,5 @@
 {
-    "name" : "礼信",
+    "name" : "倚民超市",
     "appid" : "__UNI__8FC2E59",
     "description" : "社区团购",
     "versionName" : "1.0.3",
@@ -46,7 +46,8 @@
             "sdkConfigs" : {
                 "speech" : {
                     "ifly" : {}
-                }
+                },
+                "ad" : {}
             },
             "icons" : {
                 "android" : {
@@ -95,7 +96,7 @@
     },
     "h5" : {
         "devServer" : {
-            "port" : 8000,
+            "port" : 80,
             "disableHostCheck" : true,
             "proxy" : {
                 "/dpc" : {
@@ -107,10 +108,12 @@
                         "^/dpc" : ""
                     }
                 }
-            }
+            },
+            "https" : false
         },
         "router" : {
-            "mode" : "hash"
+            "mode" : "hash",
+            "base" : "/h5/"
         }
     }
 }

@@ -11,7 +11,7 @@
 		</view>
 
 		<view class="introduce-section">
-			<text class="title">{{Title}}</text>
+			<text class="title">{{Name}}</text>
 			<view class="price-box">
 				<text class="price-tip">¥</text>
 				<text title="会员价" class="price">{{specSelected.MPrice}}</text>
@@ -19,7 +19,7 @@
 			</view>
 			<view class="bot-row">
 				<text>销量: {{sales}}</text>
-				<text>库存: 有</text>
+				<text>库存: {{specSelected.StoreAmount}}</text>
 			</view>
 		</view>
 
@@ -62,17 +62,16 @@
 
 		<!-- 底部操作菜单 -->
 		<view class="page-bottom">
-			<navigator url="/pages/index/index" open-type="switchTab" class="p-b-btn">
+			<navigator url="/pages/category/category" open-type="switchTab" class="p-b-btn">
 				<text class="yticon icon-xiatubiao--copy"></text>
 				<text>首页</text>
 			</navigator>
-			<navigator url="/pages/cart/cart" open-type="switchTab" class="p-b-btn">
+			<navigator url="/pages/cart/cart"  class="p-b-btn">
 				<text class="yticon icon-gouwuche"></text>
 				<text>购物车</text>
 			</navigator>
-			<view class="p-b-btn" :class="{active: favorite}" @click="toFavorite">
-				<text class="yticon icon-shoucang"></text>
-				<text>收藏</text>
+			<view class="p-b-btn" >
+				<text class="yticon "></text>
 			</view>
 
 			<view class="action-btn-group">
@@ -91,7 +90,7 @@
 					<image :src="img"></image>
 					<view class="right">
 						<text class="price">¥{{specSelected.Price}}</text>
-						<text class="stock">库存：有</text>
+						<text class="stock">库存：{{specSelected.StoreAmount}}</text>
 						<view class="selected">
 							已选：
 							<text class="selected-text">
@@ -128,7 +127,7 @@
 				favorite: false,
 				url: config.url,
 				id: '',
-				Title: '',
+				Name: '',
 				sales: 0,
 				imgList: [],
 				desc: "",
@@ -151,8 +150,7 @@
 					var good = res.Data;
 					ths.imgList = good.ImgList;
 					ths.desc = good.Detail;
-					ths.Title = good.Title;
-					ths.sales = good.Sales;
+					ths.Name = good.Name;
 					ths.specChildList = good.SpecList;
 					ths.img = ths.url + good.ImgList[0].Url;
 					if (good.SpecList.length > 0)
@@ -186,33 +184,7 @@
 			selectSpec(index, item) {
 				this.specSelected = item;
 			},
-			//收藏
-			toFavorite() {
-				var ths=this;
-				var msg=ths.favorite?0:1;
-				if (ths.hasLogin) {
-					ths.$api.ajax({
-						url: "/api/order/AddOrDel/fa",
-						data:{
-							ProductID:ths.id,
-							UnitID:ths.specSelected.ID,
-							ProductName:ths.Title,
-							UnitName:ths.specSelected.Name,
-							Amount:1,
-							type:msg
-						},
-						method: "POST",
-						success: function(json) {
-							var res = json.data;
-							ths.favorite = res.Data;
-						}
-					})
-				} else {
-					uni.navigateTo({
-						url: `/pages/public/login`
-					})
-				}
-			},
+			
 			buy(){	
 				var ths=this;
 				var goodsData=[];
@@ -235,7 +207,7 @@
 						data:{
 							ProductID:ths.id,
 							UnitID:ths.specSelected.ID,
-							ProductName:ths.Title,
+							ProductName:ths.Name,
 							UnitName:ths.specSelected.Name,
 							Amount:1,
 						},

@@ -73,10 +73,10 @@
 				});
 			},
 			editName: function() {
-				this.$api.msg("修改名称")
+				//this.$api.msg("修改名称")
 			},
 			goPay: function() {
-				this.$api.msg("购买会员")
+				//this.$api.msg("购买会员")
 			}
 		}
 	}
@@ -102,7 +102,7 @@
 			width: 100%;
 			height: 100%;
 			filter: blur(1px);
-			opacity: .7;
+			opacity: 0.7;
 		}
 
 		.portrait-box {

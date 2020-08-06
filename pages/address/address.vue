@@ -3,20 +3,19 @@
 		<view class="list b-b" v-for="(item, index) in addressList" :key="index" @click="checkAddress(item)">
 			<view class="wrapper">
 				<view class="address-box">
-					<text v-if="item.default" class="tag">默认</text>
-					<text class="address">{{item.addressName}} {{item.area}}</text>
+					<text v-if="item.IsDefault" class="tag">默认</text>
+					<text class="address">{{item.Province +' '+item.City +' '+ item.County +' '+item.DetailAddr }} </text>
 				</view>
 				<view class="u-box">
-					<text class="name">{{item.name}}</text>
-					<text class="mobile">{{item.mobile}}</text>
+					<text class="name">{{item.Addressee}}</text>
+					<text class="mobile">{{item.Mobile}}</text>
 				</view>
 			</view>
-			<text class="yticon icon-bianji" @click.stop="addAddress('edit', item)"></text>
+            <text class="yticon icon-iconfontshanchu1" @click.stop="del(item.ID)"></text>
+			<text class="yticon icon-bianji" @click.stop="addAddress('edit', item.ID)"></text>
 		</view>
-		<text style="display:block;padding: 16upx 30upx 10upx;lihe-height: 1.6;color: #fa436a;font-size: 24upx;">
-			重要：添加和修改地址回调仅增加了一条数据做演示，实际开发中将回调改为请求后端接口刷新一下列表即可
-		</text>
-		
+		<text style="display:block;padding: 16upx 30upx 10upx;lihe-height: 1.6;color: #fa436a;font-size: 24upx;">			
+		</text>		
 		<button class="add-btn" @click="addAddress('add')">新增地址</button>
 	</view>
 </template>
@@ -26,22 +25,9 @@
 		data() {
 			return {
 				source: 0,
+                rows:15,
+                page:1,
 				addressList: [
-					{
-						name: '刘晓晓',
-						mobile: '18666666666',
-						addressName: '贵族皇仕牛排(东城店)',
-						address: '北京市东城区',
-						area: 'B区',
-						default: true
-					},{
-						name: '刘大大',
-						mobile: '18667766666',
-						addressName: '龙回1区12号楼',
-						address: '山东省济南市历城区',
-						area: '西单元302',
-						default: false,
-					}
 				]
 			}
 		},
@@ -49,6 +35,10 @@
 			console.log(option.source);
 			this.source = option.source;
 		},
+        onShow:function(){
+            this.page=1;
+            this.refreshList();
+        },
 		methods: {
 			//选择地址
 			checkAddress(item){
@@ -58,17 +48,51 @@
 					uni.navigateBack()
 				}
 			},
-			addAddress(type, item){
+			addAddress(type, id){
 				uni.navigateTo({
-					url: `/pages/address/addressManage?type=${type}&data=${JSON.stringify(item)}`
+					url: `/pages/address/addressManage?type=${type}&id=${id}`
 				})
 			},
+            del(id){
+				var ths=this;
+                uni.showModal({
+                    title: '提示',
+                    content: '确认删除吗',
+                    success: function (res) {
+                        if (res.confirm) {
+                            ths.$api.ajax({
+                            	url: "/api/addr/Del/"+id,
+                                method: 'POST',
+                                data: {},
+                            	success: function(json) {
+                            		var json = json.data;
+                                    ths.$api.msg(json.Msg);
+                                    if(json.Success){
+                                        ths.refreshList();
+                                    }
+                                }
+                            });	 
+                        } 
+                    }
+                });
+               
+            },
 			//添加或修改成功之后回调
 			refreshList(data, type){
-				//添加或修改后事件，这里直接在最前面添加了一条数据，实际应用中直接刷新地址列表即可
-				this.addressList.unshift(data);
-				
-				console.log(data, type);
+				var ths=this;
+				this.$api.ajax({
+					url: "/api/addr/getlist/id",
+				    method: 'POST',
+				    data: {
+				        rows:ths.rows,
+				        page:ths.page,
+				    },
+					success: function(json) {
+						var res = json.data;
+				        ths.addressList =res.rows;                    
+				        ths.page=res.PageIndex;
+				    }
+				});	
 			}
 		}
 	}
@@ -103,7 +127,7 @@
 			background: #fffafb;
 			border: 1px solid #ffb4c7;
 			border-radius: 4upx;
-			padding: 4upx 10upx;
+			padding: 4upx;
 			line-height: 1;
 		}
 		.address{
@@ -123,7 +147,7 @@
 		display: flex;
 		align-items: center;
 		height: 80upx;
-		font-size: 40upx;
+		font-size: 30upx;
 		color: $font-color-light;
 		padding-left: 30upx;
 	}

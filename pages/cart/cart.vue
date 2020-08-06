@@ -5,7 +5,7 @@
 			<image src="/static/emptyCart.jpg" mode="aspectFit"></image>
 			<view v-if="hasLogin" class="empty-tips">
 				空空如也
-				<navigator class="navigator" v-if="hasLogin" url="../index/index" open-type="switchTab">随便逛逛></navigator>
+				<navigator class="navigator" v-if="hasLogin" url="../category/category" open-type="switchTab">随便逛逛></navigator>
 			</view>
 			<view v-else class="empty-tips">
 				空空如也
@@ -15,14 +15,14 @@
 		<view v-else>
 			<!-- 列表 -->
 			<view class="cart-list">
-				<block v-for="(item, index) in cartList" :key="item.id">
+				<block v-for="(item, index) in cartList" :key="item.ID">
 					<view
 						class="cart-item" 
 						:class="{'b-b': index!==cartList.length-1}"
 					>
 						<view class="image-wrapper">
-							<image :src="url+item.ImgUrl" 
-								:class="[item.loaded]"
+							<image :src="url+item.Url" 
+								class="loaded"
 								mode="aspectFill" 
 								lazy-load 
 								@load="onImageLoad('cartList', index)" 
@@ -36,15 +36,16 @@
 						</view>
 						<view class="item-right">
 							<text class="clamp title">{{item.ProductName}}</text>
-							<text class="attr">{{item.UnitName}}</text>
+							<text class="attr">单位:{{item.UnitName}}</text>
+							<text class="attr">库存:{{item.StoreAmount}}</text>
 							<text class="price">¥{{item.Price}}</text>
 							<uni-number-box 
 								class="step"
 								:min="1" 
-								:max="10"
-								:value="item.Amount>10?10:item.Amount"
-								:isMax="item.Amount>=10?true:false"
-								:isMin="item.Amount==1"
+								:max="item.StoreAmount"
+								:value="item.Amount"
+								:isMax="true"
+								:isMin="true"
 								:index="index"
 								@eventChange="numberChange"
 							></uni-number-box>
@@ -333,8 +334,8 @@
 			.attr{
 				font-size: $font-sm + 2upx;
 				color: $font-color-light;
-				height: 50upx;
-				line-height: 50upx;
+				height: 40upx;
+				line-height: 40upx;
 			}
 			.price{
 				height: 50upx;
@@ -348,10 +349,13 @@
 			color: $font-color-light;
 		}
 	}
+	.step{
+		margin-left: 10upx;
+	}
 	/* 底部栏 */
 	.action-section{
 		/* #ifdef H5 */
-		margin-bottom:100upx;
+		margin-bottom:0upx;
 		/* #endif */
 		position:fixed;
 		left: 30upx;

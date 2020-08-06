@@ -54,13 +54,30 @@ const ajax = (opt) => {
 		header: opt.header,
 		dataType: 'json',
 		success: function(res) {
-			opt.success(res);
+			if(res.statusCode=='401'){
+				uni.navigateTo({
+					url: '/pages/public/login'
+				})
+				return;
+			}
+			var json = res.data;
+			if (json.Success||json.PageSize) {
+				opt.success(res);
+			} else {
+				console.log(res)
+				uni.showToast({
+					title: json.Msg ? json.Msg : "请稍后重试"
+				});
+			}
 		},
 		fail: function() {
 			opt.fail();
 			uni.showToast({
 				title: '请稍后重试'
 			});
+		},
+		complete:function(){
+			opt.complete();
 		}
 	})
 }
