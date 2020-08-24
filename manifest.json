@@ -2,16 +2,14 @@
     "name" : "倚民超市",
     "appid" : "__UNI__8FC2E59",
     "description" : "社区团购",
-    "versionName" : "1.0.3",
-    "versionCode" : 103,
+    "versionName" : "V1.0",
+    "versionCode" : 1,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
         "usingComponents" : true,
         "modules" : {
-            "OAuth" : {},
-            "Speech" : {},
-            "Push" : {}
+            "Payment" : {}
         },
         /* 模块配置 */
         "distribute" : {
@@ -41,13 +39,20 @@
                     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
                 ]
             },
-            "ios" : {},
+            "ios" : {
+                "idfa" : false
+            },
             /* ios打包配置 */
             "sdkConfigs" : {
                 "speech" : {
                     "ifly" : {}
                 },
-                "ad" : {}
+                "ad" : {},
+                "payment" : {
+                    "alipay" : {
+                        "__platform__" : [ "android" ]
+                    }
+                }
             },
             "icons" : {
                 "android" : {
@@ -80,6 +85,9 @@
                         "spotlight@3x" : "unpackage/res/icons/120x120.png"
                     }
                 }
+            },
+            "splashscreen" : {
+                "androidStyle" : "common"
             }
         }
     },
@@ -114,6 +122,16 @@
         "router" : {
             "mode" : "hash",
             "base" : "/h5/"
+        }
+    },
+    "mp-qq" : {
+        "setting" : {
+            "urlCheck" : false
+        }
+    },
+    "mp-baidu" : {
+        "setting" : {
+            "urlCheck" : false
         }
     }
 }

@@ -11,7 +11,7 @@
 		<view class="history-section icon">
 			<list-cell @eventClick="editName()" icon="icon-weixin" title="名称" :tips="userInfo.UserName" navigateType=""></list-cell>
 			<list-cell icon="icon-dianhua-copy" title="账号" :tips="userInfo.UserCode" navigateType=""></list-cell>
-			<list-cell @eventClick="goPay()" icon="icon-iconfontweixin" title="会员信息" tips="您还不是会员" navigateType=""></list-cell>
+			<list-cell @eventClick="goPay()" icon="icon-iconfontweixin" title="会员信息" :tips="userInfo.IsMember" navigateType=""></list-cell>
 		</view>
 	</view>
 </template>
@@ -29,11 +29,11 @@
 		},
 		data() {
 			return {
-				config: config
+				config: config,
 			};
 		},
 		computed: {
-			...mapState(['userInfo', 'hasLogin']),
+			...mapState(['userInfo', 'hasLogin'])
 		},
 		onShow: function() {
 			this.init();

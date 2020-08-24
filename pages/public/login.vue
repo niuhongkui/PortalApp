@@ -2,12 +2,11 @@
 	<view class="container">
 		<view class="left-bottom-sign"></view>
 		<view class="back-btn yticon icon-zuojiantou-up" @click="navBack"></view>
-		<view class="right-top-sign"></view>
+		
 		<!-- 设置白色背景防止软键盘把下部绝对定位元素顶上来盖住输入框等 -->
 		<view class="wrapper">
-			<view class="left-top-sign">LOGIN</view>
+			<view class="left-top-sign">倚民超市</view>
 			<view class="welcome">
-				
 			</view>
 			<view class="input-content">
 				<view class="input-item">
@@ -95,7 +94,6 @@
 						var res=json.data;
 						if(res.Success){
 							ths.login(res.Data);
-							debugger
 							if(ths.back==1)
 								uni.navigateBack();
 							else
@@ -128,12 +126,12 @@
 		height: 100vh;
 		overflow: hidden;
 		background: #fff;
+        background-image: linear-gradient(#ff3758, #fff);
 	}
 
 	.wrapper {
 		position: relative;
 		z-index: 90;
-		background: #fff;
 		padding-bottom: 40upx;
 	}
 
@@ -152,6 +150,7 @@
 		color: $page-color-base;
 		position: relative;
 		left: -16upx;
+        text-align: center;
 	}
 
 	.right-top-sign {
@@ -212,7 +211,6 @@
 		align-items: flex-start;
 		justify-content: center;
 		padding: 0 30upx;
-		background: $page-color-light;
 		height: 120upx;
 		border-radius: 4px;
 		margin-bottom: 50upx;
@@ -233,6 +231,7 @@
 			font-size: $font-base + 2upx;
 			color: $font-color-dark;
 			width: 100%;
+            background-color: #fff;
 		}
 	}
 

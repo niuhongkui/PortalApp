@@ -2,19 +2,18 @@
 	<view class="container">
 		<view class="left-bottom-sign"></view>
 		<view class="back-btn yticon icon-zuojiantou-up" @click="navBack"></view>
-		<view class="right-top-sign"></view>
+		
 		<!-- 设置白色背景防止软键盘把下部绝对定位元素顶上来盖住输入框等 -->
 		<view class="wrapper">
-			<view class="left-top-sign">LOGIN</view>
+			<view class="left-top-sign">倚民超市</view>
 			<view class="welcome">
-				欢迎注册
 			</view>
 			<view class="input-content">
 				<view class="input-item">
 					<text class="tit">手机号码</text>
 					<view style="display: flex;flex-direction:row;width: 100%; ">
 						<input type="number" style="border: 1px solid #D4D4D4; border-radius: 5px;"  v-model="UserCode" placeholder="请输入手机号码" maxlength="11"   />
-						<button @click="getVerifyCode" :disabled="disabled" style="width: 200upx;text-align: center;" class="uni-input-input"><span v-if="btnTxt>0">{{btnTxt}}s</span><span v-else>验证码</span></button>
+						<button @click="getVerifyCode" :disabled="disabled" style="width: 200upx;text-align: center;background-color: #fff;" class="uni-input-input"><span v-if="btnTxt>0">{{btnTxt}}s</span><span v-else>验证码</span></button>
 					</view>			
 				</view>
 				<view class="input-item">
@@ -178,12 +177,12 @@
 		height: 100vh;
 		overflow: hidden;
 		background: #fff;
+        background-image: linear-gradient(#ff3758, #fff);
 	}
 
 	.wrapper {
 		position: relative;
 		z-index: 90;
-		background: #fff;
 		padding-bottom: 40upx;
 	}
 
@@ -202,6 +201,7 @@
 		color: $page-color-base;
 		position: relative;
 		left: -16upx;
+        text-align: center;
 	}
 
 	.right-top-sign {
@@ -262,7 +262,6 @@
 		align-items: flex-start;
 		justify-content: center;
 		padding: 0 30upx;
-		background: $page-color-light;
 		height: 120upx;
 		border-radius: 4px;
 		margin-bottom: 50upx;
@@ -283,6 +282,7 @@
 			font-size: $font-base + 2upx;
 			color: $font-color-dark;
 			width: 100%;
+            background-color: #fff;
 		}
 	}
 

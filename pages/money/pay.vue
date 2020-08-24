@@ -2,26 +2,15 @@
 	<view class="app">
 		<view class="price-box">
 			<text>支付金额</text>
-			<text class="price">{{money}}</text>
+			<view class="price">{{money}}<text class="item-oriprice">(¥{{money-(-pmoney)}})</text></view>
 		</view>
 
 		<view class="pay-type-list">
-
-			<view class="type-item b-b" @click="changePayType(1)">
-				<text class="icon yticon icon-weixinzhifu"></text>
-				<view class="con">
-					<text class="tit">微信支付</text>
-					<text>推荐使用微信支付</text>
-				</view>
-				<label class="radio">
-					<radio value="" color="#fa436a" :checked='payType == 1' />
-					</radio>
-				</label>
-			</view>
 			<view class="type-item b-b" @click="changePayType(2)">
 				<text class="icon yticon icon-alipay"></text>
 				<view class="con">
 					<text class="tit">支付宝支付</text>
+					<text>推荐使用支付宝支付</text>
 				</view>
 				<label class="radio">
 					<radio value="" color="#fa436a" :checked='payType == 2' />
@@ -39,10 +28,11 @@
 	export default {
 		data() {
 			return {
-				payType: 1,
+				payType: 2,
 				orderInfo: {},
 				orderNo:"",
-				money:0
+				money:0,
+				type:''
 			};
 		},
 		computed: {
@@ -51,6 +41,8 @@
 		onLoad(options) {
 			this.money=options.money;
 			this.orderNo=options.orderno;
+			this.pmoney=options.pmoney;
+			this.type=options.type;
 		},
 
 		methods: {
@@ -59,10 +51,37 @@
 				this.payType = type;
 			},
 			//确认支付
-			confirm: async function() {
-				uni.redirectTo({
-					url: '/pages/money/paySuccess'
-				})
+			confirm:  function() {
+				var ths=this;
+				ths.$api.ajax({
+					url: "/api/Payment/Alipay/now",
+					method: "POST",
+					data: {
+						Type:ths.type,
+						OrderNo:ths.orderNo,
+						Money:ths.money,
+						PMoney:ths.pmoney
+					},
+					success: function(json) {
+                		var data = json.data;
+						debugger
+                        if(data.Success){
+							uni.requestPayment({
+								provider: 'alipay',
+								orderInfo:data.Data,
+								success: function(res) {
+									uni.switchTab({
+										url:'/pages/order/order'
+									});
+									console.log(JSON.stringify(err));
+								},
+								fail: function(err) {
+									ths.$api.msg(JSON.stringify(err));
+								}
+							});
+						}   
+                	}
+				});
 			},
 		}
 	}
@@ -72,7 +91,12 @@
 	.app {
 		width: 100%;
 	}
-
+	.item-oriprice {
+		color: #666;
+		font-size: 28upx !important;
+		text-decoration: line-through;
+		-webkit-text-size-adjust: none;
+	}
 	.price-box {
 		background-color: #fff;
 		height: 265upx;

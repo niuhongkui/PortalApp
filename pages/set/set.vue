@@ -4,26 +4,26 @@
 			<text class="cell-tit">个人资料</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
-		<view class="list-cell b-b" @click="navTo('收货地址')" hover-class="cell-hover" :hover-stay-time="50">
+		<view class="list-cell b-b" @click="navTo('/pages/address/address')" hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">收货地址</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
-		<view class="list-cell" @click="navTo('实名认证')" hover-class="cell-hover" :hover-stay-time="50">
+		<view class="list-cell"  hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">实名认证</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
 
 		<view class="list-cell m-t">
 			<text class="cell-tit">消息推送</text>
-			<switch checked color="#fa436a" @change="switchChange" />
+			<switch  disabled="disabled" color="#fa436a" @change="switchChange" />
 		</view>
-		<view class="list-cell m-t b-b" @click="navTo('清除缓存')" hover-class="cell-hover" :hover-stay-time="50">
+		<view class="list-cell m-t b-b"  hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">清除缓存</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
 		<view class="list-cell">
 			<text class="cell-tit">检查更新</text>
-			<text class="cell-tip">当前版本 1.0.3</text>
+			<text class="cell-tip">当前版本 V1.0</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
 		<view class="list-cell log-out-btn" @click="toLogout">
@@ -49,9 +49,6 @@
 		methods: {
 			...mapMutations(['login', 'logout']),
 			navTo(url) {
-				if (!this.hasLogin) {
-					url = '/pages/public/login?back=1';
-				}
 				uni.navigateTo({
 					url
 				})

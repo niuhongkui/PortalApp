@@ -13,7 +13,7 @@
 			</view>
 			<view class="vip-card-box">
 				<image class="card-bg" src="/static/vip-card-bg.png" mode=""></image>
-				<view class="b-btn">
+				<view  @click="navTo('/pages/member/index')" class="b-btn">
 					{{userInfo.IsMember>0 ?'续费':'立即开通'}}
 				</view>
 				<view class="tit">
@@ -132,9 +132,11 @@
 			},
 			tabTo(url, state) {
 				if (!this.hasLogin) {
-					url = '/pages/public/login?back=1';
-				}
-				uni.setStorageSync("order_state", state)
+                    uni.navigateTo({
+                    	url:'/pages/public/login?back=1'
+                    })
+                    return;
+				}               
 				uni.switchTab({
 					url
 				})
@@ -193,7 +195,7 @@
 		height: 520upx;
 		padding: 100upx 30upx 0;
 		position: relative;
-
+        background-image: linear-gradient(#ffa5b4, #fff);
 		.bg {
 			position: absolute;
 			left: 0;

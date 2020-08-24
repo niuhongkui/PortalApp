@@ -44,7 +44,7 @@
 						</view>
 						<view class="action-box b-t" v-if="item.State == '待付款'">
 							<button class="action-btn" @click="cancelOrder(item.OrderNo)">取消订单</button>
-							<button class="action-btn recom">立即支付</button>
+							<button @click="topay(item)" class="action-btn recom">立即支付</button>
 						</view>
 					</view>
 
@@ -217,7 +217,11 @@
 					}
 				});
 			},
-
+			topay(item){
+				uni.redirectTo({
+				    url: '/pages/money/pay?orderno=' + item.OrderNo + '&money=' + item.Money+ '&pmoney=' + item.PMoney+ '&type=order'
+				});
+			},
 			//订单状态文字和颜色
 			orderStateExp(state) {
 				state = Number(state);

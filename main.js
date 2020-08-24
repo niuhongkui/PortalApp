@@ -47,6 +47,8 @@ const ajax = (opt) => {
 		"Authorization":"Auth " + token
 	};
 	opt.success = opt.success || function() {};
+    opt.fail = opt.fail || function() {};
+    opt.complete = opt.complete || function() {};
 	uni.request({
 		url: config.url + opt.url,
 		data: opt.data,

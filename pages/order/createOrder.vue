@@ -240,8 +240,8 @@ export default {
 
                     if (res.Success) {
                         uni.redirectTo({
-                            url: '/pages/money/pay?orderno=' + data.OrderNo + '&money=' + data.Money
-                        });
+                            url: '/pages/money/pay?orderno=' + data.OrderNo + '&money=' + data.Money+ '&pmoney=' + ths.offer+ '&type=order'
+							});
                     } else {
                         uni.showToast({
                             icon: 'none',
