@@ -64,19 +64,18 @@
 					},
 					success: function(json) {
                 		var data = json.data;
-						debugger
                         if(data.Success){
 							uni.requestPayment({
 								provider: 'alipay',
 								orderInfo:data.Data,
 								success: function(res) {
-									uni.switchTab({
-										url:'/pages/order/order'
+									uni.navigateTo({
+										url:'/pages/money/paySuccess'
 									});
-									console.log(JSON.stringify(err));
 								},
 								fail: function(err) {
-									ths.$api.msg(JSON.stringify(err));
+                                    console.log(JSON.stringify(err))
+									ths.$api.msg("支付失败");
 								}
 							});
 						}   

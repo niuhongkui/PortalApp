@@ -71,7 +71,14 @@
 				}
 				ths.disabled = true;
 				ths.btnTxt = 120;
-				ths.InterValObj = window.setInterval(ths.SetRemainTime, 1000); //启动计时器，1秒执行一次
+				ths.InterValObj = setInterval(function(){
+                    if (ths.btnTxt == 0) {
+                    	clearInterval(ths.InterValObj); //停止计时器
+                    	ths.disabled = false;
+                    } else {
+                    	ths.btnTxt--;
+                    }
+                }, 1000); //启动计时器，1秒执行一次
 				ths.$api.ajax({
 					url: "/api/userinfo/Re_VerifyCode/in?strPhone="+ths.UserCode,
 					success: function(json) {

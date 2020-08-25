@@ -87,7 +87,13 @@
                 }
             },
             "splashscreen" : {
-                "androidStyle" : "common"
+                "androidStyle" : "common",
+                "iosStyle" : "common",
+                "android" : {
+                    "hdpi" : "G:/logo/app4.png",
+                    "xhdpi" : "G:/logo/app4.png",
+                    "xxhdpi" : "G:/logo/app4.png"
+                }
             }
         }
     },
