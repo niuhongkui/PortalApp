@@ -152,7 +152,7 @@
 									ths.login(ires.Data);									
 									ths.logining = false;
 									uni.switchTab({
-										url: "/pages/index/index"
+										url: "/pages/category/category"
 									})
 								}
 							})
