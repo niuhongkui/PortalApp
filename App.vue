@@ -12,8 +12,7 @@
 			...mapMutations(['login'])
 		},
 		onLaunch: function() {
-			var ths = this;
-			
+			var ths = this;			
 			let userInfo = uni.getStorageSync(config.userKey) || '';
 			if (userInfo.Id) {
 				//更新登陆状态
@@ -30,7 +29,28 @@
 					}
 				})
 			}
-
+            //版本控制
+            uni.request({
+            	url: config.url + "/api/sysopt/Version/get",
+            	success: function(res) {						
+            		if (res.data.Success){
+                         let ver=res.data.Data;
+                         if(config.version!=ver){
+                            //提醒用户更新  
+                            uni.showModal({
+                                title: "提示",  
+                                content:"发现新版本,请更新！",  
+                                success: (m) => {  
+                                    if (m.confirm) {  
+                                        debugger
+                                        plus.runtime.openURL(config.url+ "/upload/"+ver+".apk");  
+                                    }  
+                                }  
+                            })  
+                         }
+                    }
+            	}
+            })
 		},
 		onShow: function() {
 			console.log('App Show')
