@@ -163,7 +163,10 @@
 								icon: "none"
 							});
 						}
-					}
+					},
+                    complete(){
+                        ths.logining = false;
+                    }
 				});
 
 			}			
