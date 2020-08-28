@@ -4,7 +4,7 @@
 			<swiper indicator-dots circular=true duration="400">
 				<swiper-item class="swiper-item" v-for="(item,index) in imgList" :key="index">
 					<view class="image-wrapper">
-						<image :src="url+item.Url" class="loaded" mode="aspectFill"></image>
+						<image :src="url+ (item.Url || '/images/errorImage.jpg')" class="loaded" mode="aspectFill"></image>
 					</view>
 				</swiper-item>
 			</swiper>

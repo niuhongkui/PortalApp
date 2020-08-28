@@ -28,7 +28,7 @@
 						</scroll-view> -->
 						<view  class="goods-box-single" v-for="(goodsItem, goodsIndex) in item.Detail"
 						 :key="goodsIndex">
-							<image class="goods-img" :src="url+goodsItem.Url" mode="aspectFill"></image>
+							<image class="goods-img" :src="url+(goodsItem.Url || '/images/errorImage.jpg')" mode="aspectFill"></image>
 							<view class="right">
 								<text class="title clamp">{{goodsItem.ProductName}}</text>
 								<text class="attr-box">{{goodsItem.UnitName}} x {{goodsItem.Amount}}</text>

@@ -21,7 +21,7 @@
 						:class="{'b-b': index!==cartList.length-1}"
 					>
 						<view class="image-wrapper">
-							<image :src="url+item.Url" 
+							<image :src="url+ (item.Url || '/images/errorImage.jpg')" 
 								class="loaded"
 								mode="aspectFill" 
 								lazy-load 
