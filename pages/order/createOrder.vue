@@ -189,7 +189,7 @@ export default {
                     var h = date.getHours();
                     let arr = [];
                     for (let i = h; i <= 22; i++) {
-                        arr.push();
+                        arr.push(i);
                     }
                     this.multiArray[1] = arr;
                     break;

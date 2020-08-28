@@ -7,7 +7,7 @@
 			<view v-for="(item, index) in slist" :key="item.ID" class="s-list" :id="'main-' + item.ID">
 				<view class="t-list">
 					<view @click="navToList(item.ID)" class="t-item">
-						<image :src="config.url + (item.Url || '/images/missing-face.png')"></image>
+						<image :src="config.url + (item.Url || '/images/errorImage.jpg')"></image>
 					</view>
 					<view class="t-item-text">
 						<text class="item-title">{{ item.Name }}</text>
@@ -24,7 +24,7 @@
 					</view>
 				</view>
 			</view>
-			<view class="s-list">
+			<view class="s-list" style="height: 200upx;">
 				<view class="t-list">
 					<text></text>
 					<text></text>
