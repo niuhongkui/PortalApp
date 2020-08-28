@@ -6,8 +6,8 @@
         		{{userInfo.IsMember>0 ?'会员':'非会员'}}
         	</view>
             <view class="youhui">
-                <text>优惠一、每天免费打印</text><br/>
-                <text style="line-height: 60upx;">优惠二、购物价格直降</text>
+                <text>优惠一、每天免费打印(5张)</text><br/>
+                <text style="line-height: 60upx;">优惠二、商品价格直降</text>
             </view>
             <view class="other">
                  <text>会员剩余{{userInfo.IsMember}}天</text>

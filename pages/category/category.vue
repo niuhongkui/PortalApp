@@ -105,13 +105,13 @@
 								ths.money=ths.oriMoney;
 							}
 						});
-						if (ths.money >= 50) {
+						if (ths.money >= 100) {
 						    ths.sendMoney = 0;
-						}
-						if (ths.money < 50) {
+						}else if (ths.money < 100 &&ths.money>=50) {
 						    ths.sendMoney = 2;
-						}
-						if (ths.money < 20) {
+						} else if (ths.money < 50 &&ths.money >= 20) {
+						    ths.sendMoney = 3;
+						}else{
 						    ths.sendMoney = 4;
 						}
 					}
@@ -195,7 +195,17 @@
 				list.forEach(n => {
 					ths.money = ths.money +(this.userInfo.IsMember>0?n.MemberPrice:n.Price)*n.SelectAmount;
 					ths.oriMoney = ths.oriMoney + n.Price*n.SelectAmount;
-				});				
+				});	
+                
+                if (ths.money >= 100) {
+                    ths.sendMoney = 0;
+                }else if (ths.money < 100 &&ths.money>=50) {
+                    ths.sendMoney = 2;
+                } else if (ths.money < 50 &&ths.money >= 20) {
+                    ths.sendMoney = 3;
+                }else{
+                    ths.sendMoney = 4;
+                }
 			},
 			buy() {
 				if (this.money == 0) {

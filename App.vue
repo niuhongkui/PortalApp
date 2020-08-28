@@ -42,7 +42,6 @@
                                 content:"发现新版本,请更新！",  
                                 success: (m) => {  
                                     if (m.confirm) {  
-                                        debugger
                                         plus.runtime.openURL(config.url+ "/upload/"+ver+".apk");  
                                     }  
                                 }  
