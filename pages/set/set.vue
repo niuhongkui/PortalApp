@@ -8,20 +8,16 @@
 			<text class="cell-tit">收货地址</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
-		<view class="list-cell"  hover-class="cell-hover" :hover-stay-time="50">
-			<text class="cell-tit">实名认证</text>
-			<text class="cell-more yticon icon-you"></text>
-		</view>
 
 		<view class="list-cell m-t">
 			<text class="cell-tit">消息推送</text>
-			<switch  disabled="disabled" color="#fa436a" @change="switchChange" />
+			<switch   color="#fa436a" @change="switchChange" />
 		</view>
-		<view class="list-cell m-t b-b"  hover-class="cell-hover" :hover-stay-time="50">
+		<view class="list-cell m-t b-b" @click="delCache"  hover-class="cell-hover" :hover-stay-time="50">
 			<text class="cell-tit">清除缓存</text>
-			<text class="cell-more yticon icon-you"></text>
+			<text  class="cell-more yticon icon-you"></text>
 		</view>
-		<view class="list-cell">
+		<view class="list-cell"  @click="checkLevel">
 			<text class="cell-tit">检查更新</text>
 			<text class="cell-tip">当前版本 V1.0</text>
 			<text class="cell-more yticon icon-you"></text>
@@ -72,7 +68,12 @@
 				let statusTip = e.detail.value ? '打开' : '关闭';
 				this.$api.msg(`${statusTip}消息推送`);
 			},
-
+			delCache:function(){
+				this.$api.msg(`清理完成`);
+			},
+			checkLevel:function(){
+				this.$api.msg(`已经最新版本`);
+			}
 		}
 	}
 </script>

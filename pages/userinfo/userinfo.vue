@@ -94,7 +94,7 @@
 		height: 460upx;
 		padding: 40upx 30upx 0;
 		position: relative;
-
+        background-image: linear-gradient(#ffa5b4, #fff);
 		.bg {
 			position: absolute;
 			left: 0;

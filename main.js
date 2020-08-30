@@ -66,16 +66,23 @@ const ajax = (opt) => {
 			if (json.Success||json.PageSize) {
 				opt.success(res);
 			} else {
+				debugger
 				console.log(res)
 				uni.showToast({
-					title: json.Msg ? json.Msg : "请稍后重试"
+					title: json.Msg ? json.Msg : "请稍后重试",
+					duration:1500,
+					mask:false,
+					icon:'none'
 				});
 			}
 		},
 		fail: function() {
 			opt.fail();
 			uni.showToast({
-				title: '请稍后重试'
+				title: '请稍后重试',
+				duration:1500,
+				mask:false,
+				icon:'none'
 			});
 		},
 		complete:function(){
