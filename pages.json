@@ -154,7 +154,12 @@
             "style" : {
         		"navigationBarTitleText": "会员信息"
         	}
-        }
+        }, {
+			"path": "pages/chat/index",
+			"style": {
+				"navigationBarTitleText": "客服"
+			}
+		}
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
