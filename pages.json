@@ -160,6 +160,18 @@
 				"navigationBarTitleText": "客服"
 			}
 		}
+        ,{
+            "path" : "pages/public/privacy",
+            "style" : {
+                "navigationBarTitleText": "隐私声明"
+            }
+        }
+        ,{
+            "path" : "pages/public/protocols",
+            "style" : {                
+                "navigationBarTitleText": "注册协议"
+            }
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

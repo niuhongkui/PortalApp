@@ -3,7 +3,7 @@
 		<scroll-view scroll-y class="left-aside">
 			<view v-for="item in flist" :key="item.id" class="f-item b-b" :class="{ active: item.id === currentId }" @click="tabtap(item)">{{ item.name }}</view>
 		</scroll-view>
-		<scroll-view scroll-with-animation scroll-y class="right-aside" @scroll="asideScroll" :scroll-top="tabScrollTop">
+		<scroll-view scroll-with-animation scroll-y class="right-aside"  @scroll="asideScroll" :scroll-top="tabScrollTop">
 			<view v-for="(item, index) in slist" :key="item.ID" class="s-list" :id="'main-' + item.ID">
 				<view class="t-list">
 					<view @click="navToList(item.ID)" class="t-item">
@@ -128,11 +128,16 @@
 				this.tabScrollTop = this.slist[index].top;
 			},
 			//右侧栏滚动
-			asideScroll(e) {
+			asideScroll(e) {                
+                let scrollTop = e.detail.scrollTop;
+                if(scrollTop==0){
+                    this.loadData();
+                    return;
+                }
 				if (!this.sizeCalcState) {
 					this.calcSize();
 				}
-				let scrollTop = e.detail.scrollTop;
+                
 				let tabs = this.slist.filter(item => item.top <= scrollTop).reverse();
 				if (tabs.length > 0) {
 					this.currentId = tabs[0].TypeID;
@@ -196,7 +201,8 @@
 					ths.money = ths.money +(this.userInfo.IsMember>0?n.MemberPrice:n.Price)*n.SelectAmount;
 					ths.oriMoney = ths.oriMoney + n.Price*n.SelectAmount;
 				});	
-                
+                ths.oriMoney =Number( ths.oriMoney.toFixed(2));
+                ths.money =   Number(ths.money.toFixed(2));
                 if (ths.money >= 100) {
                     ths.sendMoney = 0;
                 }else if (ths.money < 100 &&ths.money>=50) {

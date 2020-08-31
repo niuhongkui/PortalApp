@@ -32,7 +32,9 @@
 			</view>
 		</view>
 		<view class="register-section">
-			
+			注册继续操作默认同意
+			<text @click="navto('/pages/public/protocols')">《注册协议》</text>
+            <text @click="navto('/pages/public/privacy')">《隐私声明》</text>
 		</view>
 	</view>
 </template>
@@ -63,6 +65,11 @@
 			navBack() {
 				uni.navigateBack();
 			},
+            navto(url){
+                uni.navigateTo({
+                    url:url
+                })
+            },
 			getVerifyCode() {
 				var ths = this;
 				if (!util.checkPhone(ths.UserCode)) {
