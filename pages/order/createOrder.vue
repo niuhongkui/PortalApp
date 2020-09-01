@@ -112,7 +112,9 @@
 					title: '新用户专享优惠券',
 					price: 5
 				}],
-				addressData: {},
+				addressData: {
+					Mobile:''
+				},
 				orderList: [],
 				cart: [],
 				SendMoney: 0,
@@ -159,9 +161,9 @@
 						m += list[i].Price * list[i].Amount;
 						o += list[i].OPrice * list[i].Amount;
 					}
-					ths.money = m;
-					ths.offer = o;
-
+					
+					ths.offer =Number(o.toFixed(2));
+					ths.money =   Number(m.toFixed(2));
 					if (ths.money >= 100) {
 						ths.SendMoney = 0;
 					} else if (ths.money < 100 && ths.money >= 50) {
@@ -266,7 +268,7 @@
 						SendMoney: ths.SendMoney,
 						Address: addr,
 						Phone: ths.addressData.Mobile,
-						SendType: ths.ckecked ? '自取' : '送货',
+						SendType: ths.checked ? '自取' : '送货',
 						SendTime: date,
 						Detail: detail
 					},

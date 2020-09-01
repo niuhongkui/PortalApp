@@ -17,7 +17,7 @@
 					<view v-for="(item,index) in tabItem.orderList" :key="index" class="order-item">
 						<view class="i-top b-b">
 							<text class="time">{{item.CreateDate}}</text>
-							<text class="state" :style="{color: item.stateTipColor}">{{item.stateTip}}</text>
+							<text class="state" :style="{color: item.stateTipColor}">{{item.State}}</text>
 							<text v-if="item.State=='已关闭'" class="del-btn yticon icon-iconfontshanchu1" @click="deleteOrder(item.OrderNo)"></text>
 						</view>
 
@@ -41,6 +41,10 @@
 							<text class="num">{{item.Amount}}</text>
 							件商品 实付款
 							<text class="price">{{item.Money}}</text>
+						</view>
+						<view class="price-box">							
+							<text v-if="item.SendType=='自取'" class="num">送货方式：{{item.SendType}}</text>							
+							<text v-else class="num">收货地址：{{item.Address}}</text>
 						</view>
 						<view class="action-box b-t" v-if="item.State == '待付款'">
 							<button class="action-btn" @click="cancelOrder(item.OrderNo)">取消订单</button>
@@ -235,10 +239,14 @@
 						stateTip = '待付款';
 						break;
 					case 2:
-						stateTip = '待取货';
+						stateTip = '待收货';
 						break;
-					case 9:
-						stateTip = '订单已关闭';
+					case 3:
+						stateTip = '待评价';
+						stateTipColor = '#909399';
+						break;
+					case 4:
+						stateTip = '已关闭';
 						stateTipColor = '#909399';
 						break;
 

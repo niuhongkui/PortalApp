@@ -94,19 +94,9 @@
 						var res=json.data;
 						if(res.Success){
 							ths.login(res.Data);
-							let page=ths.$api.prePage();
-							if(page){
-								if(page.route.indexOf("public/login")==-1)
-									uni.navigateBack();
-								else
-									uni.switchTab({
-										url:'/pages/category/category'
-									})
-							}
-							else
-								uni.switchTab({
-									url:'/pages/category/category'
-								})
+							uni.switchTab({
+								url:'/pages/category/category'
+							})
 						}else{							
 							ths.$api.msg(res.Msg);
 						}

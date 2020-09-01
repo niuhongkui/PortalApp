@@ -2,8 +2,8 @@
     "name" : "倚民超市",
     "appid" : "__UNI__8FC2E59",
     "description" : "社区团购",
-    "versionName" : "V1.0",
-    "versionCode" : 1,
+    "versionName" : "V1.01",
+    "versionCode" : 101,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
