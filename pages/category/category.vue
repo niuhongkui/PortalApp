@@ -72,7 +72,7 @@
 				sendMoney:4
 			};
 		},
-		onShow() {
+		onLoad() {
 			this.loadData();
 			this.sizeCalcState= false;
 			this.tabScrollTop= 0;
@@ -82,12 +82,13 @@
 		},
 		methods: {
 			...mapMutations(['login', 'logout']),
-			scrolltoupper(){
-				this.loadData();					
+			scrolltoupper(){				
 				this.sizeCalcState= false;
 				this.tabScrollTop= 0;
+				this.loadData();	
+				
 			},
-			async loadData() {
+			loadData() {
 				var ths = this;
 				this.$api.ajax({
 					url: '/api/product/getcate/type',
