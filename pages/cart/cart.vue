@@ -5,7 +5,7 @@
 			<image src="/static/emptyCart.jpg" mode="aspectFit"></image>
 			<view v-if="hasLogin" class="empty-tips">
 				空空如也
-				<view class="navigator" v-if="hasLogin" @click="switchCate" url="../category/category">随便逛逛></view>
+				<view class="navigator" v-if="hasLogin" @click="switchCate" >随便逛逛></view>
 			</view>
 			<view v-else class="empty-tips">
 				空空如也
@@ -135,10 +135,10 @@
 			switchCate(){
 				uni.switchTab({
 					url:"../category/category",
-					success: function (e) {  
+					success: function (e) { 
 						var page = getCurrentPages().pop();  
 						if (page == undefined || page == null) return;  
-						page.onLoad();  
+						page.scrolltoupper();  
 					} 
 				})
 			},

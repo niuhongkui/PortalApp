@@ -134,6 +134,9 @@
 			var h = date.getHours();
 			if (h < 8)
 				h = 8;
+            let m=date.getMinutes();
+            if(m>30)
+                h=h+1;
 			let arr = [];
 			for (let i = h + 1; i <= 22; i++) {
 				arr.push(i);

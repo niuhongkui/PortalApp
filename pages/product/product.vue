@@ -17,10 +17,10 @@
 				<text title="会员价" class="price">{{specSelected.MPrice}}</text>
 				<text title="原价" class="m-price">¥{{specSelected.Price}}</text>
 			</view>
-			<view class="bot-row">
+			<!-- <view class="bot-row">
 				<text>销量: {{sales}}</text>
 				<text>库存: {{specSelected.StoreAmount}}</text>
-			</view>
+			</view> -->
 		</view>
 
 		<view class="c-list">
@@ -47,7 +47,7 @@
 			<view class="c-row b-b">
 				<text class="tit">数量</text>
 				<view class="bz-list con">
-					<text> </text>
+					<text>1</text>
 					<text> </text>
 				</view>
 			</view>
@@ -57,7 +57,7 @@
 			<view class="d-header">
 				<text>图文详情</text>
 			</view>
-			<rich-text :nodes="desc"></rich-text>
+			<rich-text  :nodes="desc"></rich-text>
 		</view>
 
 		<!-- 底部操作菜单 -->
@@ -90,7 +90,7 @@
 					<image :src="img"></image>
 					<view class="right">
 						<text class="price">¥{{specSelected.Price}}</text>
-						<text class="stock">库存：{{specSelected.StoreAmount}}</text>
+					<!-- 	<text class="stock">库存：{{specSelected.StoreAmount}}</text> -->
 						<view class="selected">
 							已选：
 							<text class="selected-text">
@@ -513,7 +513,8 @@
 	.detail-desc {
 		background: #fff;
 		margin-top: 16upx;
-
+        padding: 30upx;
+        font-size: 20upx;
 		.d-header {
 			display: flex;
 			justify-content: center;

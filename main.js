@@ -66,7 +66,6 @@ const ajax = (opt) => {
 			if (json.Success||json.PageSize) {
 				opt.success(res);
 			} else {
-				debugger
 				console.log(res)
 				uni.showToast({
 					title: json.Msg ? json.Msg : "请稍后重试",

@@ -13,14 +13,13 @@
 					<view class="t-item-text">
 						<text class="item-title">{{ item.Name }}</text>
 						<text>单位: {{ item.UnitName }}</text>
-						<text>库存: {{ item.Amount }}</text>
 						<view class="item-price">
 							会员价:{{ item.MemberPrice }}¥
 							<text class="item-oriprice">({{ item.Price }}¥)</text>
 						</view>
 					</view>
 					<view class="t-item-text" style="position:relative;width: 174upx;">
-						<uni-number-box :min="0" :max="item.Amount" :value="item.SelectAmount" :isMax="true" :isMin="true" :index="index"
+						<uni-number-box :min="0" :max="item.Amount" :value="item.SelectAmount"  :isMax="true" :isMin="true" :index="index"
 						 @eventChange="numberChange"></uni-number-box>
 					</view>
 				</view>
@@ -104,8 +103,10 @@
 						var res = json.data;
 						var list = res.Data;
 						ths.slist = list;
-						
 						let cartlist = ths.slist.filter(item => item.SelectAmount > 0);
+                        ths.money= 0;
+                        ths.oriMoney= 0;
+                        ths.sendMoney= 4;
 						cartlist.forEach(n => {
 							ths.oriMoney = ths.oriMoney + n.Price*n.SelectAmount;
 							if(ths.hasLogin){								
@@ -182,27 +183,31 @@
 				ths.slist[data.index].SelectAmount = data.number;
 				let list = ths.slist.filter(item => item.SelectAmount > 0);
 				var node=ths.slist[data.index];
-				ths.$api.ajax({
-					url: "/api/order/AddCart/pro",
-					data:{
-						ProductID:node.ID,
-						UnitID:node.UnitID,
-						ProductName:node.Name,
-						UnitName:node.UnitName,
-						Amount:node.SelectAmount,
-					},
-					method: "POST",
-					success: function(json) {
-						// var res = json.data;
-						// uni.showToast({
-						// 	icon: 'none',
-						// 	title: res.Msg
-						// });						
-					}
-				})
+                if(node.SelectAmount){
+                    ths.$api.ajax({
+                    	url: "/api/order/AddCart/pro",
+                    	data:{
+                    		ProductID:node.ID,
+                    		UnitID:node.UnitID,
+                    		ProductName:node.Name,
+                    		UnitName:node.UnitName,
+                    		Amount:node.SelectAmount,
+                    	},
+                    	method: "POST",
+                    	success: function(json) {
+                    		// var res = json.data;
+                    		// uni.showToast({
+                    		// 	icon: 'none',
+                    		// 	title: res.Msg
+                    		// });						
+                    	}
+                    })
+                }
+				
 				
 				ths.money=0;
 				ths.oriMoney =0;
+                ths.sendMoney = 4;
 				list.forEach(n => {
 					ths.money = ths.money +(this.userInfo.IsMember>0?n.MemberPrice:n.Price)*n.SelectAmount;
 					ths.oriMoney = ths.oriMoney + n.Price*n.SelectAmount;
