@@ -71,7 +71,7 @@
 				sendMoney:4
 			};
 		},
-		onLoad() {
+		onShow() {
 			this.loadData();
 			this.sizeCalcState= false;
 			this.tabScrollTop= 0;
