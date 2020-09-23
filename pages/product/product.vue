@@ -130,6 +130,15 @@
 		computed: {
 			...mapState(['hasLogin', 'userInfo'])
 		},
+        onBackPress(options){
+            var pages = getCurrentPages();
+            var page=pages[pages.length-2];
+            //#ifdef APP-PLUS
+            page= page.$vm;
+            // #endif
+            page.isRefresh=false;
+            return false;
+        },
 		onLoad(options) {
 			var ths = this;
 			//接收传值,id里面放的是标题，因为测试数据并没写id

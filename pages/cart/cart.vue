@@ -137,12 +137,12 @@
 				uni.switchTab({
 					url:"../category/category",
 					success: function (e) { 
-						var page = getCurrentPages()[0]; 
-						 //#ifdef APP-PLUS
-						 page= page.$vm;
-						 // #endif
-						if (page == undefined || page == null) return;  
-						page.scrolltoupper();  
+						// var page = getCurrentPages()[0]; 
+						//  //#ifdef APP-PLUS
+						//  page= page.$vm;
+						//  // #endif
+						// if (page == undefined || page == null) return;  
+						// page.scrolltoupper();  
 					} 
 				})
 			},

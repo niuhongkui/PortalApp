@@ -68,13 +68,16 @@
 				money: 0,
 				oriMoney: 0,
 				config: config,
-				sendMoney:4
+				sendMoney:4,
+                isRefresh:true
 			};
 		},
 		onShow() {
-			this.loadData();
-			this.sizeCalcState= false;
-			this.tabScrollTop= 0;
+            debugger
+            if(this.isRefresh)
+                this.scrolltoupper();
+            else
+                this.isRefresh=true;
 		},
 		computed: {
 			...mapState(['userInfo', 'hasLogin']),
@@ -84,8 +87,7 @@
 			scrolltoupper(){				
 				this.sizeCalcState= false;
 				this.tabScrollTop= 0;
-				this.loadData();	
-				
+				this.loadData();					
 			},
 			loadData() {
 				var ths = this;
