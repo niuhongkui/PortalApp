@@ -73,7 +73,6 @@
 			};
 		},
 		onShow() {
-            debugger
             if(this.isRefresh)
                 this.scrolltoupper();
             else
