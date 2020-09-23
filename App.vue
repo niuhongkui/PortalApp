@@ -34,15 +34,15 @@
             	url: config.url + "/api/sysopt/Version/get",
             	success: function(res) {						
             		if (res.data.Success){
-                         let ver=res.data.Data;
-                         if(config.version!=ver){
+                         let ver=res.data.Data.replace('V','');
+                         if(config.version<ver){
                             //提醒用户更新  
                             uni.showModal({
                                 title: "提示",  
                                 content:"发现新版本,请更新！",  
                                 success: (m) => {  
                                     if (m.confirm) {  
-                                        plus.runtime.openURL(config.url+ "/upload/"+ver+".apk");  
+                                        plus.runtime.openURL(config.url+ "/upload/V"+ver+".apk");  
                                     }  
                                 }  
                             })  
