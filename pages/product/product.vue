@@ -39,7 +39,7 @@
 				<text class="tit">服务</text>
 				<view class="bz-list con">
 					<text>新鲜现购 ·</text>
-					<text>假一赔十 ·</text>
+					<text>快速送达 ·</text>
 				</view>
 			</view>
 			<view class="c-row b-b">
