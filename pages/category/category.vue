@@ -1,30 +1,34 @@
 <template>
 	<view class="content">
-		<scroll-view scroll-y class="left-aside">
-			<view v-for="item in flist" :key="item.id" class="f-item b-b" :class="{ active: item.id === currentId }" @click="tabtap(item)">{{ item.name }}</view>
+		<scroll-view scroll-with-animation scroll-y class="left-aside" :scroll-top="tabScrollTop">
+			<view v-for="(item,index) in flist"  :key="item.id" class="f-item b-b" :index="index" :data-id="item.id" 
+            :class="{ active: item.id === tabCur }" @tap="tabtap(item)">{{ item.name }}</view>
 			<view style="height: 200upx;"></view>
 		</scroll-view>
-		<scroll-view scroll-with-animation scroll-y class="right-aside" @scrolltoupper="scrolltoupper"  @scroll="asideScroll" :scroll-top="tabScrollTop">
-			<view v-for="(item, index) in slist" :key="item.ID" class="s-list" :id="'main-' + item.ID">
-				<view class="t-list">
-					<view @click="navToList(item.ID)" class="t-item">
-						<image :src="config.url + (item.Url || '/images/errorImage.jpg')"></image>
-					</view>
-					<view class="t-item-text">
-						<text class="item-title">{{ item.Name }}</text>
-						<text>单位: {{ item.UnitName }}</text>
-						<view class="item-price">
-							会员价:{{ item.MemberPrice }}¥
-							<text class="item-oriprice">({{ item.Price }}¥)</text>
-						</view>
-					</view>
-					<view class="t-item-text" style="position:relative;width: 174upx;">
-						<uni-number-box :min="0" :max="item.Amount" :value="item.SelectAmount"  :isMax="true" :isMin="true" :index="index"
-						 @eventChange="numberChange"></uni-number-box>
-					</view>
-				</view>
-			</view>
-			<view class="s-list" style="height: 200upx;">
+		<scroll-view scroll-with-animation scroll-y class="right-aside" @scrolltoupper="scrolltoupper" :scroll-into-view="'main-'+mainCur"  @scroll="asideScroll" >
+            <view v-for="(e,i) in flist" :key="e.id" class="s-list" :id="'main-'+e.id">               
+                <view v-for="(item, index) in slist" v-if="item.TypeID==e.id" :key="item.ID" class="s-list" >
+                	<view class="t-list">
+                		<view @click="navToList(item.ID)" class="t-item">
+                			<image :src="config.url + (item.Url || '/images/errorImage.jpg')"></image>
+                		</view>
+                		<view class="t-item-text">
+                			<text class="item-title">{{ item.Name }}</text>
+                			<text>单位: {{ item.UnitName }}</text>
+                			<view class="item-price">
+                				会员价:{{ item.MemberPrice }}¥
+                				<text class="item-oriprice">({{ item.Price }}¥)</text>
+                			</view>
+                		</view>
+                		<view class="t-item-text" style="position:relative;width: 174upx;">
+                			<uni-number-box :min="0" :max="item.Amount" :value="item.SelectAmount"  :isMax="true" :isMin="true" :index="index"
+                			 @eventChange="numberChange"></uni-number-box>
+                		</view>
+                	</view>
+                </view>
+            </view>
+			
+			<view class="s-list" style="height:calc(80vh)">
 				<view class="t-list">
 					<text></text>
 					<text></text>
@@ -61,8 +65,8 @@
 		data() {
 			return {
 				sizeCalcState: false,
-				tabScrollTop: 0,
-				currentId: 1,
+				tabCur: 0,
+				mainCur: 0,
 				flist: [],
 				slist: [],
 				money: 0,
@@ -92,13 +96,12 @@
 				var ths = this;
 				this.$api.ajax({
 					url: '/api/product/getcate/type',
-					success: function(json) {
-						var res = json.data;
-						var list = res.Data;
-						ths.flist = list;
+					success: function(jsont) {
+						var rest = jsont.data;
+						ths.flist = rest.Data;
 					}
 				});
-				this.$api.ajax({
+				ths.$api.ajax({
 					url: '/api/product/GetAllGood/all',
 					success: function(json) {
 						var res = json.data;
@@ -132,30 +135,30 @@
 				});
 			},
 			//一级分类点击
-			tabtap(item) {
-				if (!this.sizeCalcState) {
-					this.calcSize();
-				}
-				this.currentId = item.id;
-				let index = this.slist.findIndex(sitem => sitem.TypeID === item.id);
-				this.tabScrollTop = this.slist[index].top;
+			tabtap(item) {				
+				this.tabCur = item.id;	
+				this.mainCur = item.id;
+				let index = this.flist.findIndex(f => f.id === item.id);
+				this.tabScrollTop = 50*index;
 			},
 			//右侧栏滚动
 			asideScroll(e) {                
 				if (!this.sizeCalcState) {
 					this.calcSize();
-				}                
+				} 
+                              
 				let scrollTop = e.detail.scrollTop;
-				let tabs = this.slist.filter(item => item.top <= scrollTop).reverse();
+				let tabs = this.flist.filter(item => item.top < scrollTop&&item.bottom>scrollTop).reverse();
+                
 				if (tabs.length > 0) {
-					this.currentId = tabs[0].TypeID;
+					this.tabCur = tabs[0].id;
 				}
 			},
 			//计算右侧栏每个tab的高度等信息
 			calcSize() {
 				let h = 0;
-				this.slist.forEach(item => {
-					let view = uni.createSelectorQuery().select('#main-' + item.ID);
+				this.flist.forEach(item => {
+					let view = uni.createSelectorQuery().select('#main-' + item.id);
 					view.fields({
 							size: true
 						},
@@ -280,7 +283,7 @@
 		align-items: center;
 		justify-content: center;
 		width: 100%;
-		height: 100upx;
+		height: 50px;
 		font-size: 28upx;
 		color: $font-color-base;
 		position: relative;
@@ -316,6 +319,7 @@
 		height: 70upx;
 		padding-top: 8upx;
 		font-size: 28upx;
+		background: #f8f8f8;
 		color: $font-color-dark;
 	}
 
