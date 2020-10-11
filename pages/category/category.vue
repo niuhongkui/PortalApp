@@ -1,34 +1,35 @@
 <template>
 	<view class="content">
 		<scroll-view scroll-with-animation scroll-y class="left-aside" :scroll-top="tabScrollTop">
-			<view v-for="(item,index) in flist"  :key="item.id" class="f-item b-b" :index="index" :data-id="item.id" 
-            :class="{ active: item.id === tabCur }" @tap="tabtap(item)">{{ item.name }}</view>
+			<view v-for="(item,index) in flist" :key="item.id" class="f-item b-b" :index="index" :data-id="item.id" :class="{ active: item.id === tabCur }"
+			 @tap="tabtap(item)">{{ item.name }}</view>
 			<view style="height: 200upx;"></view>
 		</scroll-view>
-		<scroll-view scroll-with-animation scroll-y class="right-aside" @scrolltoupper="scrolltoupper" :scroll-into-view="'main-'+mainCur"  @scroll="asideScroll" >
-            <view v-for="(e,i) in flist" :key="e.id" class="s-list" :id="'main-'+e.id">               
-                <view v-for="(item, index) in slist" v-if="item.TypeID==e.id" :key="item.ID" class="s-list" >
-                	<view class="t-list">
-                		<view @click="navToList(item.ID)" class="t-item">
-                			<image :src="config.url + (item.Url || '/images/errorImage.jpg')"></image>
-                		</view>
-                		<view class="t-item-text">
-                			<text class="item-title">{{ item.Name }}</text>
-                			<text>单位: {{ item.UnitName }}</text>
-                			<view class="item-price">
-                				会员价:{{ item.MemberPrice }}¥
-                				<text class="item-oriprice">({{ item.Price }}¥)</text>
-                			</view>
-                		</view>
-                		<view class="t-item-text" style="position:relative;width: 174upx;">
-                			<uni-number-box :min="0" :max="item.Amount" :value="item.SelectAmount"  :isMax="true" :isMin="true" :index="index"
-                			 @eventChange="numberChange"></uni-number-box>
-                		</view>
-                	</view>
-                </view>
-            </view>
-			
-			<view class="s-list" style="height:calc(80vh)">
+		<scroll-view scroll-with-animation scroll-y class="right-aside" @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" :scroll-into-view="'main-'+mainCur"
+		 @scroll="asideScroll">
+			<view v-for="(e,i) in flist" :key="e.id" class="s-list" :id="'main-'+e.id">
+				<view v-for="(item, index) in slist" v-if="item.TypeID==e.id" :key="item.ID" class="s-list">
+					<view class="t-list">
+						<view @click="navToList(item.ID)" class="t-item">
+							<image :src="config.url + (item.Url || '/images/errorImage.jpg')"></image>
+						</view>
+						<view class="t-item-text">
+							<text class="item-title">{{ item.Name }}</text>
+							<text>单位: {{ item.UnitName }}</text>
+							<view class="item-price">
+								会员价:{{ item.MemberPrice }}¥
+								<text class="item-oriprice">({{ item.Price }}¥)</text>
+							</view>
+						</view>
+						<view class="t-item-text" style="position:relative;width: 174upx;">
+							<uni-number-box :min="0" :max="item.Amount" :value="item.SelectAmount" :isMax="true" :isMin="true" :index="index"
+							 @eventChange="numberChange"></uni-number-box>
+						</view>
+					</view>
+				</view>
+			</view>
+
+			<view class="s-list" style="height:130upx">
 				<view class="t-list">
 					<text></text>
 					<text></text>
@@ -65,91 +66,129 @@
 		data() {
 			return {
 				sizeCalcState: false,
-				tabCur: 0,
+				tabScrollTop:0,
+				tabCur: '',
 				mainCur: 0,
 				flist: [],
 				slist: [],
 				money: 0,
 				oriMoney: 0,
 				config: config,
-				sendMoney:4,
-                isRefresh:true
+				sendMoney: 4,
+				isRefresh: true,
+				rows: 10,
+				page: 0
 			};
 		},
+		onLoad() {
+
+		},
 		onShow() {
-            if(this.isRefresh)
-                this.scrolltoupper();
-            else
-                this.isRefresh=true;
+			if (this.isRefresh)
+				this.scrolltoupper();
+			else
+				this.isRefresh = true;
 		},
 		computed: {
 			...mapState(['userInfo', 'hasLogin']),
 		},
 		methods: {
 			...mapMutations(['login', 'logout']),
-			scrolltoupper(){				
-				this.sizeCalcState= false;
-				this.tabScrollTop= 0;
-				this.loadData();					
+			scrolltoupper() {
+				this.sizeCalcState = false;
+				this.tabScrollTop = 0;
+				this.page=0;
+				this.slist=[];
+				this.loadData();
 			},
-			loadData() {
+			scrolltolower(){
+				this.page=this.page+1;
+				this.loadData();
+			},
+			getcate() {
 				var ths = this;
-				this.$api.ajax({
+				ths.$api.ajax({
 					url: '/api/product/getcate/type',
 					success: function(jsont) {
 						var rest = jsont.data;
 						ths.flist = rest.Data;
+						if (ths.flist.length > 0) {
+							ths.tabCur = ths.flist[0].id;
+						}						
+						ths.getpro();
 					}
 				});
+			},
+			getpro(){
+				var ths = this;
 				ths.$api.ajax({
-					url: '/api/product/GetAllGood/all',
+					url: '/api/product/GetAllGood2/all',
+					method: 'POST',
+					data: {
+						rows: ths.rows,
+						page: ths.page,
+						Type: ths.tabCur
+					},
 					success: function(json) {
 						var res = json.data;
 						var list = res.Data;
-						ths.slist = list;
+						ths.slist=ths.slist.concat(list);
+						debugger
 						let cartlist = ths.slist.filter(item => item.SelectAmount > 0);
-                        ths.money= 0;
-                        ths.oriMoney= 0;
-                        ths.sendMoney= 4;
+						ths.money = 0;
+						ths.oriMoney = 0;
+						ths.sendMoney = 4;
 						cartlist.forEach(n => {
-							ths.oriMoney = ths.oriMoney + n.Price*n.SelectAmount;
-							if(ths.hasLogin){								
-								ths.money = ths.money +(ths.userInfo.IsMember>0?n.MemberPrice:n.Price)*n.SelectAmount;
-							}else{
-								ths.money=ths.oriMoney;
+							ths.oriMoney = ths.oriMoney + n.Price * n.SelectAmount;
+							if (ths.hasLogin) {
+								ths.money = ths.money + (ths.userInfo.IsMember > 0 ? n.MemberPrice : n.Price) * n.SelectAmount;
+							} else {
+								ths.money = ths.oriMoney;
 							}
 						});
-						ths.oriMoney =Number( ths.oriMoney.toFixed(2));
-						ths.money =   Number(ths.money.toFixed(2));
-						
+						ths.oriMoney = Number(ths.oriMoney.toFixed(2));
+						ths.money = Number(ths.money.toFixed(2));
+				
 						if (ths.money >= 100) {
-						    ths.sendMoney = 0;
-						}else if (ths.money < 100 &&ths.money>=50) {
-						    ths.sendMoney = 2;
-						} else if (ths.money < 50 &&ths.money >= 20) {
-						    ths.sendMoney = 3;
-						}else{
-						    ths.sendMoney = 4;
+							ths.sendMoney = 0;
+						} else if (ths.money < 100 && ths.money >= 50) {
+							ths.sendMoney = 2;
+						} else if (ths.money < 50 && ths.money >= 20) {
+							ths.sendMoney = 3;
+						} else {
+							ths.sendMoney = 4;
 						}
 					}
 				});
 			},
+			loadData() {
+				var ths = this;
+				if (!ths.tabCur) {
+					ths.getcate()
+					return;
+				}
+				ths.getpro();
+			},
 			//一级分类点击
-			tabtap(item) {				
-				this.tabCur = item.id;	
-				this.mainCur = item.id;
+			tabtap(item) {
+				this.tabCur = item.id;
 				let index = this.flist.findIndex(f => f.id === item.id);
-				this.tabScrollTop = 50*index;
+				this.tabScrollTop = 50 * index;
+				
+				this.slist=[];
+				this.page=0;
+				this.loadData();
+				
 			},
 			//右侧栏滚动
-			asideScroll(e) {                
+			asideScroll(e) {
 				if (!this.sizeCalcState) {
 					this.calcSize();
-				} 
-                              
+				}
+
 				let scrollTop = e.detail.scrollTop;
-				let tabs = this.flist.filter(item => item.top < scrollTop&&item.bottom>scrollTop).reverse();
-                
+				let tabs = this.flist.filter(item => item.top < scrollTop && item.bottom > scrollTop).reverse();
+
 				if (tabs.length > 0) {
 					this.tabCur = tabs[0].id;
 				}
@@ -178,7 +217,7 @@
 			},
 			numberChange(data) {
 				var ths = this;
-				if(!ths.hasLogin){
+				if (!ths.hasLogin) {
 					uni.navigateTo({
 						url: `/pages/public/login?back=1`
 					})
@@ -186,55 +225,55 @@
 				}
 				ths.slist[data.index].SelectAmount = data.number;
 				let list = ths.slist.filter(item => item.SelectAmount > 0);
-				var node=ths.slist[data.index];
-                if(node.SelectAmount){
-                    ths.$api.ajax({
-                    	url: "/api/order/AddCart/pro",
-                    	data:{
-                    		ProductID:node.ID,
-                    		UnitID:node.UnitID,
-                    		ProductName:node.Name,
-                    		UnitName:node.UnitName,
-                    		Amount:node.SelectAmount,
-                    	},
-                    	method: "POST",
-                    	success: function(json) {
-                    		// var res = json.data;
-                    		// uni.showToast({
-                    		// 	icon: 'none',
-                    		// 	title: res.Msg
-                    		// });						
-                    	}
-                    })
-                }
-				
-				
-				ths.money=0;
-				ths.oriMoney =0;
-                ths.sendMoney = 4;
+				var node = ths.slist[data.index];
+				if (node.SelectAmount) {
+					ths.$api.ajax({
+						url: "/api/order/AddCart/pro",
+						data: {
+							ProductID: node.ID,
+							UnitID: node.UnitID,
+							ProductName: node.Name,
+							UnitName: node.UnitName,
+							Amount: node.SelectAmount,
+						},
+						method: "POST",
+						success: function(json) {
+							// var res = json.data;
+							// uni.showToast({
+							// 	icon: 'none',
+							// 	title: res.Msg
+							// });						
+						}
+					})
+				}
+
+
+				ths.money = 0;
+				ths.oriMoney = 0;
+				ths.sendMoney = 4;
 				list.forEach(n => {
-					ths.money = ths.money +(this.userInfo.IsMember>0?n.MemberPrice:n.Price)*n.SelectAmount;
-					ths.oriMoney = ths.oriMoney + n.Price*n.SelectAmount;
-				});	
-                ths.oriMoney =Number( ths.oriMoney.toFixed(2));
-                ths.money =   Number(ths.money.toFixed(2));
-                if (ths.money >= 100) {
-                    ths.sendMoney = 0;
-                }else if (ths.money < 100 &&ths.money>=50) {
-                    ths.sendMoney = 2;
-                } else if (ths.money < 50 &&ths.money >= 20) {
-                    ths.sendMoney = 3;
-                }else{
-                    ths.sendMoney = 4;
-                }
+					ths.money = ths.money + (this.userInfo.IsMember > 0 ? n.MemberPrice : n.Price) * n.SelectAmount;
+					ths.oriMoney = ths.oriMoney + n.Price * n.SelectAmount;
+				});
+				ths.oriMoney = Number(ths.oriMoney.toFixed(2));
+				ths.money = Number(ths.money.toFixed(2));
+				if (ths.money >= 100) {
+					ths.sendMoney = 0;
+				} else if (ths.money < 100 && ths.money >= 50) {
+					ths.sendMoney = 2;
+				} else if (ths.money < 50 && ths.money >= 20) {
+					ths.sendMoney = 3;
+				} else {
+					ths.sendMoney = 4;
+				}
 			},
 			buy() {
 				if (this.money == 0) {
 					this.$api.msg("请选择商品！");
 					return;
 				}
-				
-				if(!this.hasLogin){
+
+				if (!this.hasLogin) {
 					uni.navigateTo({
 						url: `/pages/public/login`
 					})
@@ -242,14 +281,14 @@
 				}
 				let list = this.slist.filter(item => item.SelectAmount > 0);
 				let goodsData = [];
-				list.forEach(item=>{
+				list.forEach(item => {
 					goodsData.push({
 						Amount: item.SelectAmount,
 						ProductID: item.ID,
-						UnitID:item.UnitID
+						UnitID: item.UnitID
 					})
 				})
-				
+
 				uni.navigateTo({
 					url: `/pages/order/createOrder?data=${JSON.stringify({
 						GoodsData: goodsData

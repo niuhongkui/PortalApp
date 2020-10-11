@@ -71,7 +71,7 @@
 				<list-cell icon="icon-dizhi" @eventClick="navTo('/pages/address/address')" iconColor="#5fcda2" title="地址管理"></list-cell>
 				<!-- <list-cell icon="icon-share" iconColor="#9789f7" title="分享" tips="邀请好友赢大礼"></list-cell>
 				<list-cell icon="icon-shoucang_xuanzhongzhuangtai" iconColor="#54b4ef" title="我的收藏"></list-cell> -->
-				<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="客服" tips="电话:13383216073"></list-cell>
+				<list-cell icon="icon-pinglun-copy" iconColor="#ee883b" title="客服" tips="电话:13323116420"></list-cell>
 				<list-cell icon="icon-shezhi1" iconColor="#e07472" title="设置" border="" @eventClick="navTo('/pages/set/set')"></list-cell>
 			</view>
 		</view>
