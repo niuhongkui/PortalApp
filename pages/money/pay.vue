@@ -59,10 +59,10 @@ export default {
         confirm: function() {
             var ths = this;
             let url='';
-            if(ths.type==2){
+            if(ths.payType==2){
                 url='/api/Payment/Alipay/now';
             }else{
-                url='/api/Payment/Wx/now';
+                url='/api/Payment/Wxpay/now';
             }
             
             ths.$api.ajax({
@@ -78,7 +78,7 @@ export default {
                     var data = json.data;
                     if (data.Success) {
                         uni.requestPayment({
-                            provider: 'alipay',
+                            provider:ths.payType==2? 'alipay':'wxpay',
                             orderInfo: data.Data,
                             success: function(res) {
                                 uni.navigateTo({

@@ -2,8 +2,8 @@
     "name" : "倚民超市",
     "appid" : "__UNI__8FC2E59",
     "description" : "社区团购",
-    "versionName" : "V1.05",
-    "versionCode" : 105,
+    "versionName" : "V1.06",
+    "versionCode" : 106,
     "transformPx" : false,
     "app-plus" : {
         /* 5+App特有相关 */
@@ -51,6 +51,11 @@
                 "payment" : {
                     "alipay" : {
                         "__platform__" : [ "android" ]
+                    },
+                    "weixin" : {
+                        "__platform__" : [ "android" ],
+                        "appid" : "wxac6dd0fa3076e0a0",
+                        "UniversalLinks" : ""
                     }
                 }
             },

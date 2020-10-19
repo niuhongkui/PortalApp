@@ -133,7 +133,6 @@
 						var res = json.data;
 						var list = res.Data;
 						ths.slist=ths.slist.concat(list);
-						debugger
 						let cartlist = ths.slist.filter(item => item.SelectAmount > 0);
 						ths.money = 0;
 						ths.oriMoney = 0;
