@@ -21,7 +21,7 @@
                 <text class="icon yticon icon-weixinzhifu"></text>
                 <view class="con">
                     <text class="tit">微信支付</text>
-                    <text>推荐使用微信支付</text>
+                    <text></text>
                 </view>
                 <label class="radio"><radio value="" color="#fa436a" :checked="payType == 1"></radio></label>
             </view>

@@ -3,7 +3,7 @@
 //缓存名称的key
 const userKey='App_User_Key';
 //版本信息
-const version='1.04';
+const version='1.06';
 
 module.exports={
 	url:url,
