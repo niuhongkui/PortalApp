@@ -19,7 +19,7 @@
 		</view>
 		<view class="list-cell"  @click="checkLevel">
 			<text class="cell-tit">检查更新</text>
-			<text class="cell-tip">当前版本 V1.0</text>
+			<text class="cell-tip">当前版本 {{version}}</text>
 			<text class="cell-more yticon icon-you"></text>
 		</view>
 		<view class="list-cell log-out-btn" @click="toLogout">
@@ -36,12 +36,15 @@
 	export default {
 		data() {
 			return {
-
+                version:'v1.0'
 			};
 		},
 		computed: {
 			...mapState(['userInfo', 'hasLogin']),
 		},
+        onLoad() {
+            this.version=plus.runtime.version;
+        },
 		methods: {
 			...mapMutations(['login', 'logout']),
 			navTo(url) {

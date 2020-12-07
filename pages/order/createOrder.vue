@@ -170,11 +170,11 @@
 					if (ths.money >= 100) {
 						ths.SendMoney = 0;
 					} else if (ths.money < 100 && ths.money >= 50) {
-						ths.SendMoney = 2;
+						ths.SendMoney = 0;
 					} else if (ths.money < 50 && ths.money >= 20) {
-						ths.SendMoney = 3;
+						ths.SendMoney = 0;
 					} else {
-						ths.SendMoney = 4;
+						ths.SendMoney = 0;
 					}
 
 				}
@@ -209,11 +209,11 @@
 					if (ths.money >= 100) {
 						ths.SendMoney = 0;
 					} else if (ths.money < 100 && ths.money >= 50) {
-						ths.SendMoney = 2;
+						ths.SendMoney = 0;
 					} else if (ths.money < 50 && ths.money >= 20) {
-						ths.SendMoney = 3;
+						ths.SendMoney = 0;
 					} else {
-						ths.SendMoney = 4;
+						ths.SendMoney = 0;
 					}
 				}	
 			},
