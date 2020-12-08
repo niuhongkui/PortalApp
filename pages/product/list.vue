@@ -13,8 +13,7 @@
 					<text :class="{active: priceOrder === 1 && filterIndex === 2}" class="yticon icon-shang"></text>
 					<text :class="{active: priceOrder === 2 && filterIndex === 2}" class="yticon icon-shang xia"></text>
 				</view>
-			</view>
-			<text class="cate-item yticon icon-fenlei1" @click="toggleCateMask('show')"></text>
+			</view>			
 		</view>
 		<view class="goods-list">
 			<view 
@@ -32,25 +31,7 @@
 				</view>
 			</view>
 		</view>
-		<uni-load-more :status="loadingType"></uni-load-more>
-		
-		<view class="cate-mask" :class="cateMaskState===0 ? 'none' : cateMaskState===1 ? 'show' : ''" @click="toggleCateMask">
-			<view class="cate-content" @click.stop.prevent="stopPrevent" @touchmove.stop.prevent="stopPrevent">
-				<scroll-view scroll-y class="cate-list">
-					<view v-for="item in cateList" :key="item.id">
-						<view class="cate-item b-b two">{{item.name}}</view>
-						<view 
-							v-for="tItem in item.child" :key="tItem.id" 
-							class="cate-item b-b" 
-							:class="{active: tItem.id==cateId}"
-							@click="changeCate(tItem)">
-							{{tItem.name}}
-						</view>
-					</view>
-				</scroll-view>
-			</view>
-		</view>
-		
+		<uni-load-more :status="loadingType"></uni-load-more>	
 	</view>
 </template>
 
@@ -65,7 +46,7 @@
 			return {
 				cateMaskState: 0, //分类面板展开状态
 				headerPosition:"fixed",
-				headerTop:"0px",
+				headerTop:"100upx",
 				loadingType: 'more', //加载更多状态
 				filterIndex: 0, 
 				cateId: 0, //已选三级分类id
@@ -73,17 +54,18 @@
 				cateList: [],
 				goodsList: [],
 				pageIndex:1,
+                searchText:"",
 				url:config.url
 			};
 		},
 		
 		onLoad(options){
-			// #ifdef H5
-			this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight+'px';
-			// #endif
-			this.cateId = options.tid;
-			this.loadCateList(options.fid,options.sid);
-			this.loadData();
+			// // #ifdef H5
+			// this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight+'px';
+			// // #endif
+			// this.cateId = options.tid;
+			// this.loadCateList(options.fid,options.sid);
+			// this.loadData();
 		},
 		onPageScroll(e){
 			//兼容iOS端下拉时顶部漂移
@@ -100,20 +82,21 @@
 		//加载更多
 		onReachBottom(){
 			this.loadData();
-		},
+		},        
+        //点击导航栏 buttons 时触发
+        onNavigationBarButtonTap(e) {
+        	// this.$api.msg('点击了扫描');           
+            var ths=this;
+           debugger
+           this.loadData();
+        }, //点击导航栏 buttons 时触发
+        onNavigationBarSearchInputConfirmed(e) {
+        	this.loadData();
+        }, 
+        onNavigationBarSearchInputChanged(e) {
+        	this.searchText=e.text;
+        },
 		methods: {
-			//加载分类
-			loadCateList(fid, sid){
-				var ths=this;
-				this.$api.ajax({
-					url:"/api/product/getlastcate/"+sid,
-					success:function(json){						
-						var res=json.data;						
-						var list=res.Data;
-						ths.cateList =list;						
-					}
-				});		
-			},
 			//加载商品 ，带下拉刷新和上滑加载
 			loadData(type='add', loading) {
 				//没有更多直接返回
@@ -200,20 +183,7 @@
 					this.cateMaskState = state;
 				}, timer)
 			},
-			//分类点击
-			changeCate(item){
-				this.cateId = item.id;
-				this.toggleCateMask();
-				uni.pageScrollTo({
-					duration: 300,
-					scrollTop: 0
-				})
-				this.loadData('refresh', 1);
-				uni.showLoading({
-					title: '正在加载'
-				})
-			},
-			//详情
+            //详情
 			navToDetailPage(item){
 				//测试数据没有写id，用title代替
 				let id = item.ID;				
@@ -229,6 +199,8 @@
 <style lang="scss">
 	page, .content{
 		background: $page-color-base;
+        margin-top: 100upx;
+        
 	}
 	.content{
 		padding-top: 96upx;

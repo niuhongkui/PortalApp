@@ -33,10 +33,7 @@
 </template>
 
 <script>
-	import uniIcon from '@/components/uni-icon/uni-icon.vue'
-	import util from '@/components/amap-wx/js/util.js';
-
-	export default {
+		export default {
 		components: {
 			uniIcon
 		},

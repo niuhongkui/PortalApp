@@ -1,5 +1,5 @@
 <template>
-	<view class="content">
+	<view class="content" style="margin-top: 80upx;">
 		<scroll-view scroll-with-animation scroll-y class="left-aside" :scroll-top="tabScrollTop">
 			<view ref="fmenu" v-for="(item,index) in flist" :key="item.id" class="f-item b-b" :index="index" :data-id="item.id" :class="{ active: item.id === tabCur }"
 			 @tap="tabtap(item,index)">{{ item.name }}</view>
@@ -93,6 +93,20 @@
 		computed: {
 			...mapState(['userInfo', 'hasLogin']),
 		},
+        // 标题栏input搜索框点击
+        onNavigationBarSearchInputClicked:  function(e) {
+        	// this.$api.msg('点击了搜索框');
+            uni.navigateTo({
+                url:"../product/list"
+            })
+        },
+        //点击导航栏 buttons 时触发
+        onNavigationBarButtonTap(e) {
+        	// this.$api.msg('点击了扫描');
+            uni.navigateTo({
+                url:"../product/list"
+            })
+        },
 		methods: {
 			...mapMutations(['login', 'logout']),
 			scrolltoupper() {
