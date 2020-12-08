@@ -1,8 +1,8 @@
 <template>
 	<view class="content">
 		<scroll-view scroll-with-animation scroll-y class="left-aside" :scroll-top="tabScrollTop">
-			<view v-for="(item,index) in flist" :key="item.id" class="f-item b-b" :index="index" :data-id="item.id" :class="{ active: item.id === tabCur }"
-			 @tap="tabtap(item)">{{ item.name }}</view>
+			<view ref="fmenu" v-for="(item,index) in flist" :key="item.id" class="f-item b-b" :index="index" :data-id="item.id" :class="{ active: item.id === tabCur }"
+			 @tap="tabtap(item,index)">{{ item.name }}</view>
 			<view style="height: 200upx;"></view>
 		</scroll-view>
 		<scroll-view scroll-with-animation scroll-y class="right-aside" @scrolltolower="scrolltolower" @scrolltoupper="scrolltoupper" :scroll-into-view="'main-'+mainCur"
@@ -77,7 +77,8 @@
 				sendMoney: 4,
 				isRefresh: true,
 				rows: 10,
-				page: 0
+				page: 0,
+                index:0
 			};
 		},
 		onLoad() {
@@ -132,11 +133,19 @@
 					success: function(json) {
 						var res = json.data;
 						var list = res.Data;
+                        //返回数据为空时，加载下一级数据
+                        if(list.length==0){
+                            if(ths.flist.length>ths.index){
+                                let item=ths.flist[ths.index+1]
+                                ths.tabtap(item,ths.index+1);                                
+                            }                            
+                            return;
+                        }
 						ths.slist=ths.slist.concat(list);
 						let cartlist = ths.slist.filter(item => item.SelectAmount > 0);
 						ths.money = 0;
 						ths.oriMoney = 0;
-						ths.sendMoney = 4;
+						ths.sendMoney = 0;
 						cartlist.forEach(n => {
 							ths.oriMoney = ths.oriMoney + n.Price * n.SelectAmount;
 							if (ths.hasLogin) {
@@ -151,11 +160,11 @@
 						if (ths.money >= 100) {
 							ths.sendMoney = 0;
 						} else if (ths.money < 100 && ths.money >= 50) {
-							ths.sendMoney = 2;
+							ths.sendMoney = 0;
 						} else if (ths.money < 50 && ths.money >= 20) {
-							ths.sendMoney = 3;
+							ths.sendMoney = 0;
 						} else {
-							ths.sendMoney = 4;
+							ths.sendMoney = 0;
 						}
 					}
 				});
@@ -169,9 +178,10 @@
 				ths.getpro();
 			},
 			//一级分类点击
-			tabtap(item) {
+			tabtap(item,index) {
 				this.tabCur = item.id;
-				let index = this.flist.findIndex(f => f.id === item.id);
+				//let index = this.flist.findIndex(f => f.id === item.id);
+                this.index=index;
 				this.tabScrollTop = 50 * index;
 				
 				this.slist=[];
@@ -249,7 +259,7 @@
 
 				ths.money = 0;
 				ths.oriMoney = 0;
-				ths.sendMoney = 4;
+				ths.sendMoney = 0;
 				list.forEach(n => {
 					ths.money = ths.money + (this.userInfo.IsMember > 0 ? n.MemberPrice : n.Price) * n.SelectAmount;
 					ths.oriMoney = ths.oriMoney + n.Price * n.SelectAmount;
@@ -259,11 +269,11 @@
 				if (ths.money >= 100) {
 					ths.sendMoney = 0;
 				} else if (ths.money < 100 && ths.money >= 50) {
-					ths.sendMoney = 2;
+					ths.sendMoney = 0;
 				} else if (ths.money < 50 && ths.money >= 20) {
-					ths.sendMoney = 3;
+					ths.sendMoney = 0;
 				} else {
-					ths.sendMoney = 4;
+					ths.sendMoney = 0;
 				}
 			},
 			buy() {
