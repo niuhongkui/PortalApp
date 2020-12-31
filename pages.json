@@ -10,7 +10,7 @@
                         "searchInput": {
                             "backgroundColor": "rgba(231, 231, 231,.7)",
                             "borderRadius": "16px",
-                            "placeholder": "请输入商品 如：西红柿",
+                            "placeholder": "请输入商品 如：伊利",
                             "disabled": true,
                             "placeholderColor": "#606266"
                         },
@@ -39,7 +39,7 @@
                             "autoFocus":true,
                             "backgroundColor": "rgba(231, 231, 231,.7)",
                             "borderRadius": "16px",
-                            "placeholder": "请输入商品 如：西红柿",
+                            "placeholder": "请输入商品 如：伊利",
                             "placeholderColor": "#606266"
                         },
                         "buttons": [
@@ -69,12 +69,7 @@
             "style": {
                 "navigationBarTitleText": "设置"
             }
-        }, {
-            "path": "pages/product/search",
-            "style": {
-                "navigationBarTitleText": "查询"
-            }
-        },
+        }, 
         {
             "path": "pages/userinfo/userinfo",
             "style": {

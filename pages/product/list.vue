@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<view class="navbar" :style="{position:headerPosition,top:headerTop}">
+		<view class="navbar" >
 			<view class="nav-item" :class="{current: filterIndex === 0}" @click="tabClick(0)">
 				综合排序
 			</view>
@@ -22,12 +22,12 @@
 				@click="navToDetailPage(item)"
 			>
 				<view class="image-wrapper">
-					<image :src="url+ (item.image || '/images/errorImage.jpg')" mode="aspectFill"></image>
+					<image :src="url+ (item.Url || '/images/errorImage.jpg')" mode="aspectFill"></image>
 				</view>
-				<text class="title clamp">{{item.title}}</text>
-				<view class="price-box">
-					<text class="price">{{item.price}}</text>
-					<text>已售 {{item.sales}}</text>
+				<text class="title clamp">{{item.Name}}</text>
+				<view class="price-box" >
+					<text class="price">{{item.Price}}</text>
+					<text >已售 {{item.OutAmount}}</text>
 				</view>
 			</view>
 		</view>
@@ -44,14 +44,9 @@
 		},
 		data() {
 			return {
-				cateMaskState: 0, //分类面板展开状态
-				headerPosition:"fixed",
-				headerTop:"100upx",
 				loadingType: 'more', //加载更多状态
 				filterIndex: 0, 
-				cateId: 0, //已选三级分类id
 				priceOrder: 0, //1 价格从低到高 2价格从高到低
-				cateList: [],
 				goodsList: [],
 				pageIndex:1,
                 searchText:"",
@@ -60,12 +55,11 @@
 		},
 		
 		onLoad(options){
-			// // #ifdef H5
-			// this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight+'px';
-			// // #endif
-			// this.cateId = options.tid;
-			// this.loadCateList(options.fid,options.sid);
-			// this.loadData();
+			// #ifdef H5
+			this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight+'px';
+			// #endif
+            
+			this.loadData();
 		},
 		onPageScroll(e){
 			//兼容iOS端下拉时顶部漂移
@@ -84,14 +78,14 @@
 			this.loadData();
 		},        
         //点击导航栏 buttons 时触发
-        onNavigationBarButtonTap(e) {
-        	// this.$api.msg('点击了扫描');           
+        onNavigationBarButtonTap(e) {          
             var ths=this;
-           debugger
-           this.loadData();
-        }, //点击导航栏 buttons 时触发
+            this.loadData('refresh');
+        }, 
+        //点击输入键盘搜索
         onNavigationBarSearchInputConfirmed(e) {
-        	this.loadData();
+        	var ths=this;
+           this.loadData('refresh');
         }, 
         onNavigationBarSearchInputChanged(e) {
         	this.searchText=e.text;
@@ -119,30 +113,20 @@
 					url:"/api/product/GetGoods/sid",
 					method: "POST",
 					data:{
-						index:ths.pageIndex,
+						page:ths.pageIndex,
 						rows:6,
-						Id:ths.cateId
+                        Type:ths.filterIndex,
+                        Code:ths.priceOrder,
+						Name:ths.searchText
 					},
 					success:function(json){	
 						var res=json.data;						
 						let goodsList=res.Data;
-						//筛选，测试数据直接前端筛选了
-						if(ths.filterIndex === 1){
-							goodsList.sort((a,b)=>b.sales - a.sales)
-						}
-						if(ths.filterIndex === 2){
-							goodsList.sort((a,b)=>{
-								if(ths.priceOrder == 1){
-									return a.price - b.price;
-								}
-								return b.price - a.price;
-							})
-						}
-						
+						//筛选，测试数据直接前端筛选了		
 						ths.goodsList = ths.goodsList.concat(goodsList);
 						ths.pageIndex=1+ths.pageIndex;
 						//判断是否还有下一页，有是more  没有是nomore(测试数据判断大于20就没有了)
-						ths.loadingType  = ths.goodsList.length > 20 ? 'nomore' : 'more';
+						ths.loadingType  = goodsList.length == 0 ? 'nomore' : 'more';
 						if(type === 'refresh'){
 							if(loading == 1){
 								uni.hideLoading()
@@ -173,16 +157,7 @@
 				uni.showLoading({
 					title: '正在加载'
 				})
-			},
-			//显示分类面板
-			toggleCateMask(type){
-				let timer = type === 'show' ? 10 : 300;
-				let	state = type === 'show' ? 1 : 0;
-				this.cateMaskState = 2;
-				setTimeout(()=>{
-					this.cateMaskState = state;
-				}, timer)
-			},
+			},			
             //详情
 			navToDetailPage(item){
 				//测试数据没有写id，用title代替
@@ -340,7 +315,7 @@
 		display:flex;
 		flex-wrap:wrap;
 		padding: 0 30upx;
-		background: #fff;
+		background: #f3f3f3;
 		.goods-item{
 			display:flex;
 			flex-direction: column;

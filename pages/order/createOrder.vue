@@ -54,8 +54,8 @@
 		<!-- 金额明细 -->
 		<view class="yt-list">
 			<view class="yt-list-cell b-b">
-				<text class="cell-tit clamp">是否自取</text>
-				<switch color="#fa436a"  class="cell-tip" value="自取" @change="checkNode"  />
+				<text class="cell-tit clamp">是否配送</text>
+				<switch color="#fa436a"  class="cell-tip" checked="true" value="配送" @change="checkNode"  />
 			</view>
 			<view class="yt-list-cell b-b">
 				<text class="cell-tit clamp">送达时间</text>
@@ -203,7 +203,7 @@
 			checkNode(e) {
 				var ths=this;				
 				ths.checked=e.target.value
-				if (ths.checked)
+				if (!ths.checked)
 					ths.SendMoney = 0;
 				else{
 					if (ths.money >= 100) {

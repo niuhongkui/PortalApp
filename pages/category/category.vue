@@ -1,5 +1,5 @@
 <template>
-	<view class="content" style="margin-top: 80upx;">
+	<view class="content" style="margin-top:150upx;">
 		<scroll-view scroll-with-animation scroll-y class="left-aside" :scroll-top="tabScrollTop">
 			<view ref="fmenu" v-for="(item,index) in flist" :key="item.id" class="f-item b-b" :index="index" :data-id="item.id" :class="{ active: item.id === tabCur }"
 			 @tap="tabtap(item,index)">{{ item.name }}</view>
@@ -148,13 +148,13 @@
 						var res = json.data;
 						var list = res.Data;
                         //返回数据为空时，加载下一级数据
-                        if(list.length==0){
-                            if(ths.flist.length>ths.index){
-                                let item=ths.flist[ths.index+1]
-                                ths.tabtap(item,ths.index+1);                                
-                            }                            
-                            return;
-                        }
+                        // if(list.length==0){
+                        //     if(ths.flist.length>ths.index){
+                        //         let item=ths.flist[ths.index+1]
+                        //         ths.tabtap(item,ths.index+1);                                
+                        //     }                            
+                        //     return;
+                        // }
 						ths.slist=ths.slist.concat(list);
 						let cartlist = ths.slist.filter(item => item.SelectAmount > 0);
 						ths.money = 0;
@@ -291,6 +291,11 @@
 				}
 			},
 			buy() {
+                uni.navigateTo({
+                    url:"/pages/cart/cart"
+                });
+                return;
+                //去购物车，不直接结算
 				if (this.money == 0) {
 					this.$api.msg("请选择商品！");
 					return;
