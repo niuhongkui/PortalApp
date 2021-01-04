@@ -26,21 +26,27 @@
 				</view>
 				<text class="title clamp">{{item.Name}}</text>
 				<view class="price-box" >
-					<text class="price">{{item.Price}}</text>
+					<text class="price">{{item.MemberPrice}}<text class="item-oriprice">({{ item.Price }}¥)</text></text>
 					<text >已售 {{item.OutAmount}}</text>
 				</view>
+                <view  >
+                	<button type="primary" class="add-cart-btn" @click.stop="addCart(item)">加入购物车</button>
+                </view>
 			</view>
 		</view>
 		<uni-load-more :status="loadingType"></uni-load-more>	
 	</view>
 </template>
 
-<script>
+<script>    
+    import uniNumberBox from '@/components/uni-number-box.vue';
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
-	var config = require('../../common/config.js');
+	var config = require('../../common/config.js');	
+    import {mapState} from 'vuex';
 	export default {
 		components: {
-			uniLoadMore	
+			uniLoadMore	,
+            uniNumberBox
 		},
 		data() {
 			return {
@@ -53,7 +59,9 @@
 				url:config.url
 			};
 		},
-		
+		computed: {
+			...mapState(['hasLogin', 'userInfo'])
+		},		
 		onLoad(options){
 			// #ifdef H5
 			this.headerTop = document.getElementsByTagName('uni-page-head')[0].offsetHeight+'px';
@@ -165,6 +173,33 @@
 				uni.navigateTo({
 					url: `/pages/product/product?id=${id}`
 				})
+			},
+			addCart(node) {
+				var ths = this;
+				if (ths.hasLogin) {
+					ths.$api.ajax({
+						url: '/api/order/AddCart/pro',
+						data: {
+							ProductID: node.ID,
+							UnitID: node.UnitID,
+							ProductName: node.Name,
+							UnitName: node.UnitName,
+							Amount: 1
+						},
+						method: 'POST',
+						success: function(json) {
+							var res = json.data;
+							uni.showToast({
+								icon: 'none',
+								title: res.Msg
+							});
+						}
+					});
+				} else {
+					uni.navigateTo({
+						url: `/pages/public/login?back=1`
+					});
+				}
 			},
 			stopPrevent(){}
 		},
@@ -354,11 +389,24 @@
 			color: $uni-color-primary;
 			line-height: 1;
 			&:before{
-				content: '￥';
+				content: '会员价';
 				font-size: 26upx;
 			}
 		}
 	}
-	
-
+	.add-cart-btn{
+         font-size: 26upx;
+         background-color: #f56c6c;
+         height: 50upx;
+         line-height: 50upx;
+         width:200upx ;
+         float: right;
+         margin-top: 5upx;
+    }
+.item-oriprice {
+		color: #666;
+		font-size: 18upx !important;
+		text-decoration: line-through;
+		-webkit-text-size-adjust: none;
+	}
 </style>
